@@ -16,10 +16,11 @@ function setUp() {
 
 function configSocketIO() {
   io.on('connection', function(socket){
-    console.log('a user connected');
+    console.log('an anonymous user connected');
 
-    socket.on('connectToGame', function(msg){
-      console.log(msg);
+    socket.on('playerName', function(name){
+      io.emit('playerName', name);
+      console.log(name);
     });
 
     socket.on('disconnect', function(){
@@ -62,6 +63,13 @@ function createTeam() {
     this.y = y;
   }
 
+  function addPieceToArray(label, teamCount, value) {
+    for(var i = 1; i < teamCount+1; i++) {
+      var newLabel = label + i;
+      teamArr.push(new pieceObj(newLabel, value, false, null, null));
+    }
+  }
+
   // make the one off pieces
   teamArr.push(new pieceObj('Flag', -1, false, null, null));
   teamArr.push(new pieceObj('Marshal', 1, false, null, null));
@@ -78,23 +86,26 @@ function createTeam() {
   addPieceToArray('Scout', 8, 9);
   addPieceToArray('BOMB', 6, 0);
 
-  function addPieceToArray(label, teamCount, value) {
-    for(var i = 1; i < teamCount+1; i++) {
-      var newLabel = label + i;
-      teamArr.push(new pieceObj(newLabel, value, false, null, null));
-    }
-  }
   return teamArr;
 }
 
-function startGame() {
-  setUp();
-  gameBoard = createGameBoard();
-  teamA = createTeam();
-  teamB = createTeam();
+function initializePlayers(name) {
+  playerArr = {};
+  return playerArr;
 }
 
+function initializeGame() {
+  var gameBoard = createGameBoard();
+  var teamA = createTeam();
+  var teamB = createTeam();
+}
+
+function startMain() {
+  setUp();
+  initializePlayers();
+  initializeGame()
+}
 
 // MAIN
 
-startGame();
+startMain();

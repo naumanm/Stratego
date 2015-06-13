@@ -2,14 +2,19 @@ $( document ).ready(function() {
 
   var socket = io();
 
-  function initialize() {
+  function comunicator() {
     document.getElementById("myButton").addEventListener("click", function( event ) {
-      event.target.innerHTML = "click count: " + event.detail;
-      socket.emit('connectToGame',  "Hi Mike");
+      var message = document.getElementById("myArea").value;
+      socket.emit('playerName', message);
     }, false);
+
+    socket.on('playerName', function(msg){
+      $('#name').replaceWith($('<h2>').text(msg));
+    });
+
   }
 
-  initialize();
-  console.log( "ready!" );
+  // main
+  comunicator();
 
 });
