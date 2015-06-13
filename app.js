@@ -4,6 +4,8 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var playerName1 = null;
+var playerName2 = null;
 
 function setUp() {
   app.set("view engine", "ejs");
@@ -15,12 +17,21 @@ function setUp() {
 }
 
 function configSocketIO() {
+  var roomNumber=1;
   io.on('connection', function(socket){
     console.log('an anonymous user connected');
 
     socket.on('playerName', function(name){
-      io.emit('playerName', name);
-      console.log(name);
+      if (!playerName1) {
+        playerName1 = name;
+        io.emit('playerName1', playerName1);
+      } else if (!playerName2) {
+        playerName2 = name;
+        io.emit('playerName1', playerName1);
+        io.emit('playerName2', playerName2);
+      } else {
+        console.log('This should lock out the next user');
+      }
     });
 
     socket.on('disconnect', function(){
@@ -90,7 +101,8 @@ function createTeam() {
 }
 
 function initializePlayers(name) {
-  playerArr = {};
+  playerArr = [];
+  playerArr.push(name);
   return playerArr;
 }
 
@@ -102,7 +114,9 @@ function initializeGame() {
 
 function startMain() {
   setUp();
-  initializePlayers();
+  var playersArr = initializePlayers();
+  console.log(playersArr);
+
   initializeGame()
 }
 
