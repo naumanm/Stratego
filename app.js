@@ -116,7 +116,6 @@ function game(player1, player2) {
   teamA = createTeam();
   teamB = createTeam();
 
-
 }
 
 

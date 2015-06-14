@@ -3,14 +3,20 @@ $( document ).ready(function() {
   var socket = io();
   var playerName1 = null;
   var playerName2 = null;
+  var currentPlayer = null;
 
   function comunicator() {
 
-    document.getElementById("gameBoard").hidden=true;
-
     document.getElementById("nameButton").addEventListener("click", function( event ) {
       var name = document.getElementById("textArea").value;
+      currentPlayer = name;
+      console.log(currentPlayer);
       socket.emit('playerName', name);
+    }, false);
+
+    document.getElementById("turnButton").addEventListener("click", function( event ) {
+      var shotObj = {player: 'player1', x: 2, y: 3};
+      socket.emit('player1Shot', shotObj);
     }, false);
 
     socket.on('playerName1', function(name){
@@ -23,6 +29,16 @@ $( document ).ready(function() {
 
     socket.on('startGame', function(value){
       setUIForGame();
+    });
+
+    socket.on('player1Turn', function(value) {
+      console.log("player1Turn - update the board");
+    });
+
+    socket.on('player2Turn', function(value) {
+      var shotobj = {player: 'player2', x: 5, y: 6};
+      socket.emit('player2Shot', shotObj);
+      console.log("player2Turn");
     });
 
     socket.on('gameLocked', function(value) {
@@ -58,20 +74,10 @@ $( document ).ready(function() {
       for (var i = 1; i < 11; i++){
         for (var j = 1; j < 11; j++) {
           gameBoardArr.push(new Cell(false, false, false, j, i));
-          createGameBoardUI(j, i);
         }
       }
       return gameBoardArr;
     }
-
-
-
-    function createGameBoardUI(x, y) {
-
-
-    }
-
-
 
     function setUIForGame() {
       var gameBoard = createGameBoardArr();
@@ -80,8 +86,8 @@ $( document ).ready(function() {
       $('#startGame').replaceWith($('<h2>').text('Game Has Started'));
       removeNameSetupUI();
       console.log(gameBoard);
+      console.log(currentPlayer);
     }
-
   }
 
   // main
