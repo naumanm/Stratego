@@ -37,6 +37,7 @@ function configSocketIO() {
         console.log(playerName2);
         game(playerName1, playerName2);
       } else {
+        io.emit('gameLocked', 'locked');
         console.log('Locking out additional players');
       }
     });
@@ -62,8 +63,8 @@ function createGameBoard() {
     this.value = value;
   }
 
-  for (var i = 0; i < 10; i++){
-    for (var j = 0; j < 10; j++) {
+  for (var i = 1; i < 11; i++){
+    for (var j = 1; j < 11; j++) {
       gameBoardArr.push(new Cell(false, false, false, j, i));
     }
   }
@@ -115,13 +116,6 @@ function game(player1, player2) {
   teamA = createTeam();
   teamB = createTeam();
 
-  socket.on('playerName1Ready', function(name) {
-
-  }
-
-  socket.on('playerName2Ready', function(name) {
-
-  }
 
 }
 
