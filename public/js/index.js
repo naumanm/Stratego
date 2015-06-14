@@ -22,15 +22,28 @@ $( document ).ready(function() {
       setUIForGame();
     });
 
+    socket.on('gameLocked', function(value) {
+      console.log('test1');
+
+      if (value === 'locked') {
+        $('#playerName1').replaceWith($('<h2>').text("Game is locked"));
+        removeNameSetupUI();
+      }
+    });
+
     function setName(playerName, name) {
       $('#' + playerName).replaceWith($('<h2>').text(playerName + " " +name));
       socket.emit(playerName, name);
     }
 
-    function setUIForGame() {
-      $('#startGame').replaceWith($('<h2>').text('Game Has Started'));
+    function removeNameSetupUI (){
       document.getElementById("textArea").remove();
       document.getElementById("nameButton").remove();
+    }
+
+    function setUIForGame() {
+      $('#startGame').replaceWith($('<h2>').text('Game Has Started'));
+      removeNameSetupUI();
     }
   }
 
