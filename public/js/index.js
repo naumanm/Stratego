@@ -5,6 +5,9 @@ $( document ).ready(function() {
   var playerName2 = null;
 
   function comunicator() {
+
+    document.getElementById("gameBoard").hidden=true;
+
     document.getElementById("nameButton").addEventListener("click", function( event ) {
       var name = document.getElementById("textArea").value;
       socket.emit('playerName', name);
@@ -25,6 +28,8 @@ $( document ).ready(function() {
     socket.on('gameLocked', function(value) {
       if (value === 'locked') {
         $('#playerName1').replaceWith($('<h2>').text("Game is locked"));
+        // document.getElementById("playerName1").value = "Game is locked";
+
         removeNameSetupUI();
       }
     });
@@ -39,7 +44,7 @@ $( document ).ready(function() {
       document.getElementById("nameButton").remove();
     }
 
-    function createGameBoard() {
+    function createGameBoardArr() {
       var gameBoardArr = [];
 
       function Cell(occupied, team, value, x, y) {
@@ -53,13 +58,24 @@ $( document ).ready(function() {
       for (var i = 1; i < 11; i++){
         for (var j = 1; j < 11; j++) {
           gameBoardArr.push(new Cell(false, false, false, j, i));
+          createGameBoardUI(j, i);
         }
       }
       return gameBoardArr;
     }
 
+
+
+    function createGameBoardUI(x, y) {
+
+
+    }
+
+
+
     function setUIForGame() {
-      var gameBoard = createGameBoard();
+      var gameBoard = createGameBoardArr();
+      document.getElementById("gameBoard").hidden=false;
 
       $('#startGame').replaceWith($('<h2>').text('Game Has Started'));
       removeNameSetupUI();
@@ -69,6 +85,7 @@ $( document ).ready(function() {
   }
 
   // main
+  document.getElementById("gameBoard").hidden=true;
   comunicator();
 
 });
