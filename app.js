@@ -48,19 +48,13 @@ function configSocketIO() {
     socket.on('player1Ready', function(value){
       console.log("hello1");
       player1Ready = true;
-      if (player1Ready && player2Ready) {
-        var turnObj = {};
-        console.log("start turns");
-      }
+      checkReady();
     });
 
     socket.on('player2Ready', function(value){
       console.log("hello2");
       player2Ready = true;
-      if (player1Ready && player2Ready) {
-        var turnObj = {};
-        console.log("start turns");
-      }
+      checkReady();
     });
 
     socket.on('disconnect', function(){
@@ -71,6 +65,15 @@ function configSocketIO() {
   http.listen(3000, function(){
     console.log('listening on *:3000');
   });
+}
+
+function checkReady() {
+  console.log('checkReady');
+  if (player1Ready && player2Ready) {
+    var turnObj = {};
+    console.log("gameBoardLocked");
+    io.emit('gameBoardLocked', 'locked');
+  }
 }
 
 function createGameBoard() {
@@ -138,11 +141,11 @@ function playersReady() {
 }
 
 function setGameBoard(player1, player2) {
-  io.emit('startGame', true);
+  io.emit('setBoard', true);
   gameBoard = createGameBoard();
   teamA = createTeam();
   teamB = createTeam();
-  console.log("Game has started");
+  console.log("Place you pieces");
 }
 
 

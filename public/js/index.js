@@ -38,7 +38,8 @@ $( document ).ready(function() {
       playerName2 = name;
     });
 
-    socket.on('startGame', function(value){
+    socket.on('setBoard', function(value){
+      console.log("setBoard");
       setUIForGame();
     });
 
@@ -52,13 +53,8 @@ $( document ).ready(function() {
       console.log("player2Turn");
     });
 
-    socket.on('gameLocked', function(value) {
-      if (value === 'locked') {
-        $('#playerName1').replaceWith($('<h2>').text("Game is locked"));
-        // document.getElementById("playerName1").value = "Game is locked";
-
-        removeNameSetupUI();
-      }
+    socket.on('gameBoardLocked', function(value) {
+      console.log('board is locked');
     });
 
     function setName(playerName, name) {
@@ -93,9 +89,8 @@ $( document ).ready(function() {
     function setUIForGame() {
       var gameBoard = createGameBoardArr();
       document.getElementById("gameBoard").hidden=false;
-
-      $('#startGame').replaceWith($('<h2>').text('Game Has Started'));
-      removeNameSetupUI();
+      $('#startGame').replaceWith($('<h2>').text('Place your pieces'));
+      //removeNameSetupUI`();
       console.log(gameBoard);
       console.log(currentPlayer);
     }
