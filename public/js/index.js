@@ -5,7 +5,7 @@ $( document ).ready(function() {
   var playerName2 = null;
 
   function comunicator() {
-    document.getElementById("myButton").addEventListener("click", function( event ) {
+    document.getElementById("nameButton").addEventListener("click", function( event ) {
       var name = document.getElementById("textArea").value;
       socket.emit('playerName', name);
     }, false);
