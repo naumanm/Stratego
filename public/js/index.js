@@ -22,6 +22,12 @@ $( document ).ready(function() {
 
   }
 
+  function checkPlayers() {
+    if (!playerName1 && !playerName2) {
+      return true;
+    }
+  }
+
   // main
   comunicator();
 

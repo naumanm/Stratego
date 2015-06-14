@@ -6,6 +6,9 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var playerName1 = null;
 var playerName2 = null;
+var gameBoard = null;
+var teamA = null;
+var teamB = null;
 
 function setUp() {
   app.set("view engine", "ejs");
@@ -13,7 +16,6 @@ function setUp() {
   app.get('/', function(req, res){
     res.render('index.ejs');
   });
-  configSocketIO();
 }
 
 function configSocketIO() {
@@ -29,6 +31,7 @@ function configSocketIO() {
         playerName2 = name;
         io.emit('playerName1', playerName1);
         io.emit('playerName2', playerName2);
+        initializeGame();
       } else {
         console.log('This should lock out the next user');
       }
@@ -100,26 +103,18 @@ function createTeam() {
   return teamArr;
 }
 
-function initializePlayers(name) {
-  playerArr = [];
-  playerArr.push(name);
-  return playerArr;
-}
-
 function initializeGame() {
-  var gameBoard = createGameBoard();
-  var teamA = createTeam();
-  var teamB = createTeam();
+  gameBoard = createGameBoard();
+  teamA = createTeam();
+  teamB = createTeam();
+  console.log('Name1 ' + playerName1);
+  console.log('Name2 ' + playerName2);
+  console.log(gameBoard);
+  console.log(teamA);
+  console.log(teamB);
 }
 
-function startMain() {
-  setUp();
-  var playersArr = initializePlayers();
-  console.log(playersArr);
-
-  initializeGame()
-}
 
 // MAIN
-
-startMain();
+setUp();
+configSocketIO();
