@@ -4,8 +4,10 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+
 var playerName1 = null;
 var playerName2 = null;
+
 var gameBoard = null;
 var teamA = null;
 var teamB = null;
@@ -19,7 +21,6 @@ function setUp() {
 }
 
 function configSocketIO() {
-  var roomNumber=1;
   io.on('connection', function(socket){
     console.log('an anonymous user connected');
 
@@ -27,13 +28,16 @@ function configSocketIO() {
       if (!playerName1) {
         playerName1 = name;
         io.emit('playerName1', playerName1);
+        console.log(playerName1);
       } else if (!playerName2) {
         playerName2 = name;
         io.emit('playerName1', playerName1);
         io.emit('playerName2', playerName2);
-        initializeGame();
+        console.log(playerName1);
+        console.log(playerName2);
+        game(playerName1, playerName2);
       } else {
-        console.log('This should lock out the next user');
+        console.log('Locking out additional players');
       }
     });
 
@@ -58,8 +62,8 @@ function createGameBoard() {
     this.value = value;
   }
 
-  for (var i = 1; i < 11; i++){
-    for (var j = 1; j < 11; j++) {
+  for (var i = 0; i < 10; i++){
+    for (var j = 0; j < 10; j++) {
       gameBoardArr.push(new Cell(false, false, false, j, i));
     }
   }
@@ -78,7 +82,7 @@ function createTeam() {
   }
 
   function addPieceToArray(label, teamCount, value) {
-    for(var i = 1; i < teamCount+1; i++) {
+    for(var i = 0; i < teamCount; i++) {
       var newLabel = label + i;
       teamArr.push(new pieceObj(newLabel, value, false, null, null));
     }
@@ -103,15 +107,13 @@ function createTeam() {
   return teamArr;
 }
 
-function initializeGame() {
+function game(player1, player2) {
+  console.log("Game has started");
+  io.emit('startGame', true);
+
   gameBoard = createGameBoard();
   teamA = createTeam();
   teamB = createTeam();
-  console.log('Name1 ' + playerName1);
-  console.log('Name2 ' + playerName2);
-  console.log(gameBoard);
-  console.log(teamA);
-  console.log(teamB);
 }
 
 
