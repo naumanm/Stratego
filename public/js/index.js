@@ -14,17 +14,28 @@ $( document ).ready(function() {
       socket.emit('playerName', name);
     }, false);
 
-    document.getElementById("turnButton").addEventListener("click", function( event ) {
-      var shotObj = {player: 'player1', x: 2, y: 3};
-      socket.emit('player1Shot', shotObj);
+    document.getElementById("readyButton").addEventListener("click", function( event ) {
+      console.log('1 ' + playerName1);
+      console.log('2 ' + playerName2);
+      console.log('current ' + currentPlayer);
+
+      if (playerName1 === currentPlayer) {
+        socket.emit('player1Ready', 'true');
+        console.log("player1Ready");
+      } else if (playerName2 === currentPlayer) {
+        socket.emit('player2Ready', 'true');
+        console.log("player2Ready");
+      }
     }, false);
 
     socket.on('playerName1', function(name){
       setName('playerName1', name);
+      playerName1 = name;
     });
 
     socket.on('playerName2', function(name){
       setName('playerName2', name);
+      playerName2 = name;
     });
 
     socket.on('startGame', function(value){

@@ -12,6 +12,9 @@ var gameBoard = null;
 var teamA = null;
 var teamB = null;
 
+player1Ready = false;
+player2Ready = false;
+
 function setUp() {
   app.set("view engine", "ejs");
   app.use(express.static(__dirname + '/public'));
@@ -35,10 +38,28 @@ function configSocketIO() {
         io.emit('playerName2', playerName2);
         console.log(playerName1);
         console.log(playerName2);
-        game(playerName1, playerName2);
+        setGameBoard(playerName1, playerName2);
       } else {
         io.emit('gameLocked', 'locked');
         console.log('Locking out additional players');
+      }
+    });
+
+    socket.on('player1Ready', function(value){
+      console.log("hello1");
+      player1Ready = true;
+      if (player1Ready && player2Ready) {
+        var turnObj = {};
+        console.log("start turns");
+      }
+    });
+
+    socket.on('player2Ready', function(value){
+      console.log("hello2");
+      player2Ready = true;
+      if (player1Ready && player2Ready) {
+        var turnObj = {};
+        console.log("start turns");
       }
     });
 
@@ -109,31 +130,19 @@ function createTeam() {
 }
 
 function checkWinner () {
-    debugger;
+    console.log("Is winner?");
 }
 
-function game(player1, player2) {
-  var turnCounter = 1;
-  var winner = false;
+function playersReady() {
+  return true;
+}
 
-  console.log("Game has started");
+function setGameBoard(player1, player2) {
   io.emit('startGame', true);
-
   gameBoard = createGameBoard();
   teamA = createTeam();
   teamB = createTeam();
-
-  if (playersReady) {
-      while (!winner) {
-      if (turnCounter % 2 === 1 ) {
-        console.log('player1 turn');
-      } else {
-        console.log('player2 turn');
-      }
-      turnCounter++
-      winner = checkWinner();
-    }
-  }
+  console.log("Game has started");
 }
 
 
