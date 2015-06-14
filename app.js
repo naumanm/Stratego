@@ -114,6 +114,15 @@ function game(player1, player2) {
   gameBoard = createGameBoard();
   teamA = createTeam();
   teamB = createTeam();
+
+  socket.on('playerName1Ready', function(name) {
+
+  }
+
+  socket.on('playerName2Ready', function(name) {
+
+  }
+
 }
 
 

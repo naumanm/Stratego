@@ -23,9 +23,8 @@ $( document ).ready(function() {
     });
 
     function setName(playerName, name) {
-      socket.emit(playerName, name);
-      document.getElementById(playerName).value = name;
       $('#' + playerName).replaceWith($('<h2>').text(playerName + " " +name));
+      socket.emit(playerName, name);
     }
 
     function setUIForGame() {
@@ -33,7 +32,6 @@ $( document ).ready(function() {
       document.getElementById("textArea").remove();
       document.getElementById("nameButton").remove();
     }
-
   }
 
   // main
