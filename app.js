@@ -108,7 +108,14 @@ function createTeam() {
   return teamArr;
 }
 
+function checkWinner () {
+    debugger;
+}
+
 function game(player1, player2) {
+  var turnCounter = 1;
+  var winner = false;
+
   console.log("Game has started");
   io.emit('startGame', true);
 
@@ -116,6 +123,17 @@ function game(player1, player2) {
   teamA = createTeam();
   teamB = createTeam();
 
+  if (playersReady) {
+      while (!winner) {
+      if (turnCounter % 2 === 1 ) {
+        console.log('player1 turn');
+      } else {
+        console.log('player2 turn');
+      }
+      turnCounter++
+      winner = checkWinner();
+    }
+  }
 }
 
 
