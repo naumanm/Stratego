@@ -43,18 +43,21 @@ $( document ).ready(function() {
       setUIForGame();
     });
 
-    socket.on('player1Turn', function(value) {
-      console.log("player1Turn - update the board");
-    });
-
-    socket.on('player2Turn', function(value) {
-      var shotobj = {player: 'player2', x: 5, y: 6};
-      socket.emit('player2Shot', shotObj);
-      console.log("player2Turn");
-    });
-
     socket.on('gameBoardLocked', function(value) {
       console.log('board is locked');
+    });
+
+    socket.on('toTurn', function(object) {
+      // update board
+      console.log('toTurn ' + object);
+    });
+
+    document.getElementById("shootButton").addEventListener("click", function( event ) {
+      var x = 3;
+      var y = 4;
+      shotObj = {player: currentPlayer, xposition: x, yposition: y};
+      console.log(shotObj);
+      socket.emit('fromTurn', shotObj);
     });
 
     function setName(playerName, name) {

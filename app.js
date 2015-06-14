@@ -57,6 +57,11 @@ function configSocketIO() {
       checkReady();
     });
 
+    socket.on('fromTurn', function(object){
+      console.log("test");
+      //io.emit('toTurn', emitToTurnObj);
+    });
+
     socket.on('disconnect', function(){
       console.log('user disconnected');
     });
