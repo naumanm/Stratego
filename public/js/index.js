@@ -1,3 +1,5 @@
+// Stratego, by mikeNauman
+
 $( document ).ready(function() {
 
   var socket = io();
@@ -57,14 +59,14 @@ $( document ).ready(function() {
       var x = 3;
       var y = 4;
       var pieceValue = 3;
-      shotObj = {player: currentPlayer, xposition: x, yposition: y, value: pieceValue};
+      shotObj = {player: currentPlayer, xposition: x, yposition: y, turnValue: pieceValue};
       console.log('to server');
       console.log(shotObj);
       socket.emit('fromClientToServerTurn', shotObj);
     });
 
     function setName(playerName, name) {
-      $('#' + playerName).replaceWith($('<h2>').text(playerName + " " +name));
+      $('#' + playerName).replaceWith($('<h2 id=' + playerName + '>').text(playerName + " " +name));
       socket.emit(playerName, name);
     }
 

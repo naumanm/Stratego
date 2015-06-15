@@ -56,16 +56,7 @@ function configSocketIO() {
     });
 
     socket.on('fromClientToServerTurn', function(object){
-      console.log('from client');
-      console.log(object);
-      var fromServertoTurnObj = {};
-      var x = 6;
-      var y = 9;
-      var pieceValue = 5;
-      fromServerToClientTurnObj = {player: object.player, xposition: x, yposition: y, value: pieceValue};
-      console.log('to client');
-      console.log(fromServerToClientTurnObj);
-      io.emit('fromServerToClientTurn', fromServerToClientTurnObj);
+      io.emit('fromServerToClientTurn', object);
     });
 
     socket.on('disconnect', function(){
