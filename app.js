@@ -12,6 +12,9 @@ var gameBoard = null;
 var teamA = null;
 var teamB = null;
 
+player1Ready = false;
+player2Ready = false;
+
 function setUp() {
   app.set("view engine", "ejs");
   app.use(express.static(__dirname + '/public'));
@@ -35,11 +38,25 @@ function configSocketIO() {
         io.emit('playerName2', playerName2);
         console.log(playerName1);
         console.log(playerName2);
-        game(playerName1, playerName2);
+        setGameBoard(playerName1, playerName2);
       } else {
         io.emit('gameLocked', 'locked');
         console.log('Locking out additional players');
       }
+    });
+
+    socket.on('player1Ready', function(value){
+      player1Ready = true;
+      checkReady();
+    });
+
+    socket.on('player2Ready', function(value){
+      player2Ready = true;
+      checkReady();
+    });
+
+    socket.on('fromClientToServerTurn', function(object){
+      io.emit('fromServerToClientTurn', object);
     });
 
     socket.on('disconnect', function(){
@@ -50,6 +67,15 @@ function configSocketIO() {
   http.listen(3000, function(){
     console.log('listening on *:3000');
   });
+}
+
+function checkReady() {
+  console.log('checkReady');
+  if (player1Ready && player2Ready) {
+    var turnObj = {};
+    console.log("gameBoardLocked");
+    io.emit('gameBoardLocked', 'locked');
+  }
 }
 
 function createGameBoard() {
@@ -108,15 +134,20 @@ function createTeam() {
   return teamArr;
 }
 
-function game(player1, player2) {
-  console.log("Game has started");
-  io.emit('startGame', true);
+function checkWinner () {
+    console.log("Is winner?");
+}
 
+function playersReady() {
+  return true;
+}
+
+function setGameBoard(player1, player2) {
+  io.emit('setBoard', true);
   gameBoard = createGameBoard();
   teamA = createTeam();
   teamB = createTeam();
-
-
+  console.log("Place you pieces");
 }
 
 
