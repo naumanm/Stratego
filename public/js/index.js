@@ -14,6 +14,8 @@ $( document ).ready(function() {
       currentPlayer = name;
       console.log(currentPlayer);
       socket.emit('playerName', name);
+      document.getElementById("textArea").hidden=true;
+      document.getElementById("nameButton").hidden=true;
     }, false);
 
     document.getElementById("readyButton").addEventListener("click", function( event ) {
@@ -28,6 +30,7 @@ $( document ).ready(function() {
         socket.emit('player2Ready', 'true');
         console.log("player2Ready");
       }
+      document.getElementById("readyButton").hidden=true;
     }, false);
 
     socket.on('playerName1', function(name){
@@ -70,11 +73,6 @@ $( document ).ready(function() {
       socket.emit(playerName, name);
     }
 
-    function removeNameSetupUI (){
-      document.getElementById("textArea").remove();
-      document.getElementById("nameButton").remove();
-    }
-
     function createGameBoardArr() {
       var gameBoardArr = [];
 
@@ -98,7 +96,6 @@ $( document ).ready(function() {
       var gameBoard = createGameBoardArr();
       document.getElementById("gameBoard").hidden=false;
       $('#startGame').replaceWith($('<h2 id="startGame">').text('Place your pieces'));
-      //removeNameSetupUI`();
       console.log(gameBoard);
       console.log(currentPlayer);
     }
