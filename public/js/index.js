@@ -9,32 +9,31 @@ $( document ).ready(function() {
 
   document.getElementById("readyButton").hidden=true;
   document.getElementById("shootButton").hidden=true;
+  document.getElementById("gameBoard").hidden=true;
 
   function comunicator() {
 
     document.getElementById("nameButton").addEventListener("click", function( event ) {
       var name = document.getElementById("textArea").value;
       currentPlayer = name;
-      console.log(currentPlayer);
       socket.emit('playerName', name);
       document.getElementById("textArea").remove();
       document.getElementById("nameButton").remove();
       document.getElementById("readyButton").hidden=false;
+      document.getElementById("gameBoard").hidden=false;
+      $('#playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
+      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
     }, false);
 
     document.getElementById("readyButton").addEventListener("click", function( event ) {
-      console.log('1 ' + playerName1);
-      console.log('2 ' + playerName2);
-      console.log('current ' + currentPlayer);
-
       if (playerName1 === currentPlayer) {
         socket.emit('player1Ready', 'true');
-        console.log("player1Ready");
       } else if (playerName2 === currentPlayer) {
         socket.emit('player2Ready', 'true');
-        console.log("player2Ready");
       }
-      document.getElementById("readyButton").hidden=true;
+      document.getElementById("readyButton").remove();
+      document.getElementById("gameBoard").hidden=false;
+      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Board is locked'));
     }, false);
 
     socket.on('playerName1', function(name){
@@ -48,21 +47,32 @@ $( document ).ready(function() {
     });
 
     socket.on('setBoard', function(value){
-      console.log("setBoard");
       setUIForGame();
     });
 
     socket.on('gameBoardLocked', function(value) {
-      console.log('board is locked');
-      document.getElementById("shootButton").hidden=false;
-      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Board is locked'));
+      document.getElementById("playerName").remove();
+      if (currentPlayer === playerName1) {
+        document.getElementById("shootButton").hidden=false;
+        $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(playerName1 + ' your shot!'));
+      } else {
+        document.getElementById("shootButton").hidden=true;
+        $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + playerName1));
+      }
     });
 
+    // listens for the other persons shot
     socket.on('fromServerToClientTurn', function(object) {
-      console.log('From server');
-      console.log(object);
+      if (currentPlayer === object.player) {
+        document.getElementById("shootButton").hidden=false;
+        $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(object.player + ' your shot!'));
+      } else {
+        document.getElementById("shootButton").hidden=true;
+        $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + object.player));
+      }
     });
 
+    // initiates each turn
     document.getElementById("shootButton").addEventListener("click", function( event ) {
       var x = 3;
       var y = 4;
@@ -71,10 +81,11 @@ $( document ).ready(function() {
       console.log('to server');
       console.log(shotObj);
       socket.emit('fromClientToServerTurn', shotObj);
+      document.getElementById("shootButton").hidden=true;
     });
 
     function setName(playerName, name) {
-      $('#playerName').replaceWith($('<h2 id="playerName">').text(playerName + " " + name));
+      //$('#playerName').replaceWith($('<h2 id="playerName">').text(playerName + " " + name));
       socket.emit(playerName, name);
     }
 
