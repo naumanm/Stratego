@@ -45,19 +45,22 @@ $( document ).ready(function() {
 
     socket.on('gameBoardLocked', function(value) {
       console.log('board is locked');
+      $('#startGame').replaceWith($('<h2 id="startGame">').text('Board is locked'));
     });
 
-    socket.on('toTurn', function(object) {
-      // update board
-      console.log('toTurn ' + object);
+    socket.on('fromServerToClientTurn', function(object) {
+      console.log('From server');
+      console.log(object);
     });
 
     document.getElementById("shootButton").addEventListener("click", function( event ) {
       var x = 3;
       var y = 4;
-      shotObj = {player: currentPlayer, xposition: x, yposition: y};
+      var pieceValue = 3;
+      shotObj = {player: currentPlayer, xposition: x, yposition: y, value: pieceValue};
+      console.log('to server');
       console.log(shotObj);
-      socket.emit('fromTurn', shotObj);
+      socket.emit('fromClientToServerTurn', shotObj);
     });
 
     function setName(playerName, name) {
@@ -92,7 +95,7 @@ $( document ).ready(function() {
     function setUIForGame() {
       var gameBoard = createGameBoardArr();
       document.getElementById("gameBoard").hidden=false;
-      $('#startGame').replaceWith($('<h2>').text('Place your pieces'));
+      $('#startGame').replaceWith($('<h2 id="startGame">').text('Place your pieces'));
       //removeNameSetupUI`();
       console.log(gameBoard);
       console.log(currentPlayer);

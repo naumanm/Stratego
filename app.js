@@ -46,20 +46,26 @@ function configSocketIO() {
     });
 
     socket.on('player1Ready', function(value){
-      console.log("hello1");
       player1Ready = true;
       checkReady();
     });
 
     socket.on('player2Ready', function(value){
-      console.log("hello2");
       player2Ready = true;
       checkReady();
     });
 
-    socket.on('fromTurn', function(object){
-      console.log("test");
-      //io.emit('toTurn', emitToTurnObj);
+    socket.on('fromClientToServerTurn', function(object){
+      console.log('from client');
+      console.log(object);
+      var fromServertoTurnObj = {};
+      var x = 6;
+      var y = 9;
+      var pieceValue = 5;
+      fromServerToClientTurnObj = {player: object.player, xposition: x, yposition: y, value: pieceValue};
+      console.log('to client');
+      console.log(fromServerToClientTurnObj);
+      io.emit('fromServerToClientTurn', fromServerToClientTurnObj);
     });
 
     socket.on('disconnect', function(){
