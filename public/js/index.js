@@ -7,6 +7,9 @@ $( document ).ready(function() {
   var playerName2 = null;
   var currentPlayer = null;
 
+  document.getElementById("readyButton").hidden=true;
+  document.getElementById("shootButton").hidden=true;
+
   function comunicator() {
 
     document.getElementById("nameButton").addEventListener("click", function( event ) {
@@ -14,8 +17,9 @@ $( document ).ready(function() {
       currentPlayer = name;
       console.log(currentPlayer);
       socket.emit('playerName', name);
-      document.getElementById("textArea").hidden=true;
-      document.getElementById("nameButton").hidden=true;
+      document.getElementById("textArea").remove();
+      document.getElementById("nameButton").remove();
+      document.getElementById("readyButton").hidden=false;
     }, false);
 
     document.getElementById("readyButton").addEventListener("click", function( event ) {
@@ -50,7 +54,8 @@ $( document ).ready(function() {
 
     socket.on('gameBoardLocked', function(value) {
       console.log('board is locked');
-      $('#startGame').replaceWith($('<h2 id="startGame">').text('Board is locked'));
+      document.getElementById("shootButton").hidden=false;
+      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Board is locked'));
     });
 
     socket.on('fromServerToClientTurn', function(object) {
@@ -69,7 +74,7 @@ $( document ).ready(function() {
     });
 
     function setName(playerName, name) {
-      $('#' + playerName).replaceWith($('<h2 id=' + playerName + '>').text(playerName + " " +name));
+      $('#playerName').replaceWith($('<h2 id="playerName">').text(playerName + " " + name));
       socket.emit(playerName, name);
     }
 
@@ -95,7 +100,7 @@ $( document ).ready(function() {
     function setUIForGame() {
       var gameBoard = createGameBoardArr();
       document.getElementById("gameBoard").hidden=false;
-      $('#startGame').replaceWith($('<h2 id="startGame">').text('Place your pieces'));
+      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
       console.log(gameBoard);
       console.log(currentPlayer);
     }
