@@ -117,6 +117,17 @@ $( document ).ready(function() {
     }
   }
 
+  $("td").mouseover(function(){
+    console.log("Mouse Over");
+  });
+
+  $("td").mouseleave(function(){
+    console.log('Mouse leave');
+  });
+  $("td").click(function(){
+    console.log('Mouse click');
+  });
+
   // main
   document.getElementById("gameBoard").hidden=true;
   comunicator();
