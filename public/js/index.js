@@ -72,15 +72,16 @@ $( document ).ready(function() {
       }
     });
 
+    // needs to be replaced with the click!!
     // initiates each turn
     document.getElementById("shootButton").addEventListener("click", function( event ) {
-      var x = 3;
-      var y = 4;
+      var x = $(this).data("idx");
+      var y = $(this).data("idy");
       var pieceValue = 3;
       shotObj = {player: currentPlayer, xposition: x, yposition: y, turnValue: pieceValue};
       console.log('to server');
       console.log(shotObj);
-      socket.emit('fromClientToServerTurn', shotObj);
+      //socket.emit('fromClientToServerTurn', shotObj);
       document.getElementById("shootButton").hidden=true;
     });
 
@@ -118,15 +119,35 @@ $( document ).ready(function() {
   }
 
   $("td").mouseover(function(){
-    console.log("Mouse Over");
+    //console.log("Mouse Over");
   });
 
   $("td").mouseleave(function(){
-    console.log('Mouse leave');
+    //console.log('Mouse leave');
   });
-  $("td").click(function(){
+  $("td").click(function(event){
+    var x = $(this).data("idx");
+    var y = $(this).data("idy");
+    //var pieceValue = $(this).data("value");
+    value = 4;
+    turnMouseClick(x, y, value);
+  });
+
+  function turnMouseClick(x, y, value) {
     console.log('Mouse click');
-  });
+    console.log(event);
+    console.log(event.target);
+    console.log(x);
+    console.log(y);
+    console.log(value);
+
+    shotObj = {player: currentPlayer, xposition: x, yposition: y, turnValue: pieceValue};
+    console.log('to server');
+    console.log(shotObj);
+    socket.emit('fromClientToServerTurn', shotObj);
+    document.getElementById("shootButton").hidden=true;
+
+  }
 
   // main
   document.getElementById("gameBoard").hidden=true;
