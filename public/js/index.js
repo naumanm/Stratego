@@ -8,7 +8,6 @@ $( document ).ready(function() {
   var currentPlayer = null;
 
   document.getElementById("readyButton").hidden=true;
-  document.getElementById("shootButton").hidden=true;
   document.getElementById("gameBoard").hidden=true;
 
   function comunicator() {
@@ -53,10 +52,8 @@ $( document ).ready(function() {
     socket.on('gameBoardLocked', function(value) {
       document.getElementById("playerName").remove();
       if (currentPlayer === playerName1) {
-        document.getElementById("shootButton").hidden=false;
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(playerName1 + ' your shot!'));
       } else {
-        document.getElementById("shootButton").hidden=true;
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + playerName1));
       }
     });
@@ -64,10 +61,8 @@ $( document ).ready(function() {
     // listens for the other persons shot
     socket.on('fromServerToClientTurn', function(object) {
       if (currentPlayer === object.player) {
-        document.getElementById("shootButton").hidden=false;
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(object.player + ' your shot!'));
       } else {
-        document.getElementById("shootButton").hidden=true;
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + object.player));
       }
     });
@@ -81,11 +76,9 @@ $( document ).ready(function() {
       console.log('to server');
       console.log(shotObj);
       socket.emit('fromClientToServerTurn', shotObj);
-      document.getElementById("shootButton").hidden=true;
     });
 
     function setName(playerName, name) {
-      //$('#playerName').replaceWith($('<h2 id="playerName">').text(playerName + " " + name));
       socket.emit(playerName, name);
     }
 
@@ -112,10 +105,25 @@ $( document ).ready(function() {
       var gameBoard = createGameBoardArr();
       document.getElementById("gameBoard").hidden=false;
       $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
-      console.log(gameBoard);
-      console.log(currentPlayer);
     }
   }
+
+  $("td").mouseover(function(){
+    console.log("Mouse Over");
+  });
+
+  $("td").mouseleave(function(){
+    console.log('Mouse leave');
+  });
+
+  $("td").click(function(event){
+    var x = event.xposition;
+    var y = event.yposition
+    var pieceValue = 3;
+    shotObj = {player: currentPlayer, xposition: x, yposition: y, turnValue: pieceValue};
+    console.log(shotObj);
+    socket.emit('fromClientToServerTurn', shotObj);
+  });
 
   // main
   document.getElementById("gameBoard").hidden=true;
