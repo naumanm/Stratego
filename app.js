@@ -58,6 +58,7 @@ function configSocketIO() {
     });
 
     socket.on('fromClientToServerTurn', function(object){
+      console.log(object);
       io.emit('fromServerToClientTurn', turnController(object));
     });
 

@@ -67,17 +67,6 @@ $( document ).ready(function() {
       }
     });
 
-    // initiates each turn
-    document.getElementById("shootButton").addEventListener("click", function( event ) {
-      var x = 3;
-      var y = 4;
-      var pieceValue = 3;
-      shotObj = {player: currentPlayer, xposition: x, yposition: y, turnValue: pieceValue};
-      console.log('to server');
-      console.log(shotObj);
-      socket.emit('fromClientToServerTurn', shotObj);
-    });
-
     function setName(playerName, name) {
       socket.emit(playerName, name);
     }
@@ -117,11 +106,12 @@ $( document ).ready(function() {
   });
 
   $("td").click(function(event){
-    var x = event.xposition;
-    var y = event.yposition
-    var pieceValue = 3;
-    shotObj = {player: currentPlayer, xposition: x, yposition: y, turnValue: pieceValue};
-    console.log(shotObj);
+    console.log(event);
+    var x = event.target.dataset.idx;
+    var y = event.target.dataset.idy;
+    var pieceValue = event.target.dataset.value;
+    shotObj = {player: currentPlayer, idx: x, idy: y, turnValue: pieceValue};
+    console.log('from client ' + shotObj);
     socket.emit('fromClientToServerTurn', shotObj);
   });
 
