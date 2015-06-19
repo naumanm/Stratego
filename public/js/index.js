@@ -60,6 +60,7 @@ $( document ).ready(function() {
 
     // listens for the other persons shot
     socket.on('fromServerToClientTurn', function(object) {
+      console.log(object);
       if (currentPlayer === object.player) {
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(object.player + ' your shot!'));
       } else {
@@ -106,12 +107,11 @@ $( document ).ready(function() {
   });
 
   $("td").click(function(event){
-    console.log(event);
     var x = event.target.dataset.idx;
     var y = event.target.dataset.idy;
     var pieceValue = event.target.dataset.value;
     shotObj = {player: currentPlayer, idx: x, idy: y, turnValue: pieceValue};
-    console.log('from client ' + shotObj);
+    console.log(shotObj);
     socket.emit('fromClientToServerTurn', shotObj);
   });
 

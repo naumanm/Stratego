@@ -80,16 +80,18 @@ function setGameBoard(player1, player2) {
 }
 
 function turnController(object) {
+  console.log(object);
   var sendObj = {};
   if (object.player === playerName1) {
     sendObj.player = playerName2;
   } else {
     sendObj.player = playerName1;
   }
-  sendObj.xposition = object.xposition;
-  sendObj.yposition = object.yposition;
+  sendObj.idx = object.idx;
+  sendObj.idy = object.idy;
   sendObj.turnVlaue = object.turnValue;
   // update gameBoard, teamA, and teamB
+  console.log(sendObj);
   return sendObj;
 }
 
