@@ -55,6 +55,7 @@ $( document ).ready(function() {
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(playerName1 + ' your shot!'));
       } else {
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + playerName1));
+        console.log("Should lock out UI here");
       }
     });
 
@@ -65,6 +66,7 @@ $( document ).ready(function() {
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(object.player + ' your shot!'));
       } else {
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + object.player));
+        console.log("Should lock out UI here");
       }
     });
 
@@ -99,9 +101,12 @@ $( document ).ready(function() {
   }
 
   $("td").mouseover(function(event){
-    console.log("Mouse Over");
-    console.log(event);
-    $(this).css("background-color", "red");
+//    if () {
+      console.log("Mouse Over");
+      console.log(event);
+      console.log(currentPlayer);
+      $(this).css("background-color", "red");
+//    }
   });
 
   $("td").mouseleave(function(event){
@@ -116,6 +121,7 @@ $( document ).ready(function() {
     var pieceValue = event.target.dataset.value;
     shotObj = {player: currentPlayer, idx: x, idy: y, turnValue: pieceValue};
     console.log(shotObj);
+    console.log(currentPlayer);
     socket.emit('fromClientToServerTurn', shotObj);
   });
 
