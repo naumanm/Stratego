@@ -1,4 +1,4 @@
-// placeholder
+/* heyMikeNauman  */
 body {
   background-color: blue;
 }
@@ -15,4 +15,10 @@ td {
   text-align: center;
   /* only right and bottom so as not to double up on the borders per table cell */
   border: 1px solid black;
+}
+
+.banner {
+  width: 900px;
+  height: 175;
+  background: gray;
 }
