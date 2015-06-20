@@ -25,6 +25,12 @@ td {
   background: gray;
 }
 
+.row1{
+  width: 100%;
+  height: 500px;
+  background: black;
+}
+
 .rightMenu {
   margin: 20px;
   padding: 20px;
