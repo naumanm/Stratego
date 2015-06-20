@@ -1,4 +1,4 @@
-// Stratego, by mikeNauman
+// Stratego, by heyMikeNauman
 
 $( document ).ready(function() {
 
@@ -98,12 +98,16 @@ $( document ).ready(function() {
     }
   }
 
-  $("td").mouseover(function(){
+  $("td").mouseover(function(event){
     console.log("Mouse Over");
+    console.log(event);
+    $(this).css("background-color", "red");
   });
 
-  $("td").mouseleave(function(){
+  $("td").mouseleave(function(event){
     console.log('Mouse leave');
+    console.log(event);
+    $(this).css("background-color", "lightyellow");
   });
 
   $("td").click(function(event){

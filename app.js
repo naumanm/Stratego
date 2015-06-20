@@ -1,4 +1,4 @@
-// Stratego, by mikeNauman
+// Stratego, by heyMikeNauman
 
 var express = require('express');
 var app = express();
