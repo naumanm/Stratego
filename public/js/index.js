@@ -1,4 +1,4 @@
-// Stratego, by mikeNauman
+// Stratego, by heyMikeNauman
 
 $( document ).ready(function() {
 
@@ -60,22 +60,12 @@ $( document ).ready(function() {
 
     // listens for the other persons shot
     socket.on('fromServerToClientTurn', function(object) {
+      console.log(object);
       if (currentPlayer === object.player) {
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(object.player + ' your shot!'));
       } else {
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + object.player));
       }
-    });
-
-    // initiates each turn
-    document.getElementById("shootButton").addEventListener("click", function( event ) {
-      var x = 3;
-      var y = 4;
-      var pieceValue = 3;
-      shotObj = {player: currentPlayer, xposition: x, yposition: y, turnValue: pieceValue};
-      console.log('to server');
-      console.log(shotObj);
-      socket.emit('fromClientToServerTurn', shotObj);
     });
 
     function setName(playerName, name) {
@@ -108,19 +98,23 @@ $( document ).ready(function() {
     }
   }
 
-  $("td").mouseover(function(){
+  $("td").mouseover(function(event){
     console.log("Mouse Over");
+    console.log(event);
+    $(this).css("background-color", "red");
   });
 
-  $("td").mouseleave(function(){
+  $("td").mouseleave(function(event){
     console.log('Mouse leave');
+    console.log(event);
+    $(this).css("background-color", "lightyellow");
   });
 
   $("td").click(function(event){
-    var x = event.xposition;
-    var y = event.yposition
-    var pieceValue = 3;
-    shotObj = {player: currentPlayer, xposition: x, yposition: y, turnValue: pieceValue};
+    var x = event.target.dataset.idx;
+    var y = event.target.dataset.idy;
+    var pieceValue = event.target.dataset.value;
+    shotObj = {player: currentPlayer, idx: x, idy: y, turnValue: pieceValue};
     console.log(shotObj);
     socket.emit('fromClientToServerTurn', shotObj);
   });

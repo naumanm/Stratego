@@ -11,7 +11,7 @@ td {
   width: 25px;
   height: 25px;
   color: black;
-  background: cyan;
+  background: lightyellow;
   text-align: center;
   /* only right and bottom so as not to double up on the borders per table cell */
   border: 1px solid black;
