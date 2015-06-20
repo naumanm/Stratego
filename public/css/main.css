@@ -20,7 +20,21 @@ td {
 .banner {
   margin: 15px;
   padding: 10px;
-  width: 500px;
+  width: 800px;
   height: 175;
   background: gray;
+}
+
+.rightMenu {
+  margin: 20px;
+  padding: 20px;
+  height: 300px;
+  width: 100px;
+  background: cyan;
+  display: inline-block;
+}
+
+#gameBoard {
+  margin: 15px;
+  padding: 15px;
 }
