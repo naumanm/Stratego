@@ -4,12 +4,16 @@ body {
 }
 
 h2 {
-  color: red;
+  color: yellow;
+}
+
+textarea {
+  font-size: 26px;
 }
 
 td {
-  width: 25px;
-  height: 25px;
+  width: 40px;
+  height: 40px;
   color: black;
   background: lightyellow;
   text-align: center;
@@ -19,19 +23,22 @@ td {
 
 .banner {
   margin: 15px;
+  border-radius: 5px;
   padding: 10px;
-  width: 800px;
+  width: 95%;
   height: 175;
   background: gray;
 }
 
 .row1{
-  width: 100%;
-  height: 500px;
+  border-radius: 5px;
+  width: 99%;
+  height: 525px;
   background: black;
 }
 
 .rightMenu {
+  border-radius: 5px;
   margin: 20px;
   padding: 20px;
   height: 300px;
@@ -43,4 +50,5 @@ td {
 #gameBoard {
   margin: 15px;
   padding: 15px;
+  display: inline-block;
 }
