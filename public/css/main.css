@@ -1,10 +1,11 @@
 /* heyMikeNauman  */
 body {
   background-color: blue;
+  font-family: arial;
 }
 
 h2 {
-  color: yellow;
+  color: black;
 }
 
 textarea {
@@ -39,9 +40,9 @@ td {
 
 .rightMenu {
   border-radius: 5px;
-  margin: 20px;
+  margin: 30px;
   padding: 20px;
-  height: 425px;
+  height: 420px;
   width: 30%;
   background: gray;
   display: inline-block;
