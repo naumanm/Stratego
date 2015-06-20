@@ -6,6 +6,7 @@ $( document ).ready(function() {
   var playerName1 = null;
   var playerName2 = null;
   var currentPlayer = null;
+  var currentTurn = false;
 
   document.getElementById("readyButton").hidden=true;
   document.getElementById("gameBoard").hidden=true;
@@ -52,10 +53,11 @@ $( document ).ready(function() {
     socket.on('gameBoardLocked', function(value) {
       document.getElementById("playerName").remove();
       if (currentPlayer === playerName1) {
+        currentTurn = true
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(playerName1 + ' your shot!'));
       } else {
+        currentTurn = false;
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + playerName1));
-        console.log("Should lock out UI here");
       }
     });
 
@@ -63,10 +65,11 @@ $( document ).ready(function() {
     socket.on('fromServerToClientTurn', function(object) {
       console.log(object);
       if (currentPlayer === object.player) {
+        currentTurn = true;
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(object.player + ' your shot!'));
       } else {
+        currentTurn = false;
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + object.player));
-        console.log("Should lock out UI here");
       }
     });
 
@@ -101,28 +104,26 @@ $( document ).ready(function() {
   }
 
   $("td").mouseover(function(event){
-//    if () {
-      console.log("Mouse Over");
-      console.log(event);
-      console.log(currentPlayer);
+    if (currentTurn) {
       $(this).css("background-color", "red");
-//    }
+    }
   });
 
   $("td").mouseleave(function(event){
-    console.log('Mouse leave');
-    console.log(event);
-    $(this).css("background-color", "lightyellow");
+    if (currentTurn) {
+      $(this).css("background-color", "lightyellow");
+    }
   });
 
   $("td").click(function(event){
-    var x = event.target.dataset.idx;
-    var y = event.target.dataset.idy;
-    var pieceValue = event.target.dataset.value;
-    shotObj = {player: currentPlayer, idx: x, idy: y, turnValue: pieceValue};
-    console.log(shotObj);
-    console.log(currentPlayer);
-    socket.emit('fromClientToServerTurn', shotObj);
+    if (currentTurn) {
+      var x = event.target.dataset.idx;
+      var y = event.target.dataset.idy;
+      var pieceValue = event.target.dataset.value;
+      shotObj = {player: currentPlayer, idx: x, idy: y, turnValue: pieceValue};
+      $(this).css("background-color", "lightyellow");
+      socket.emit('fromClientToServerTurn', shotObj);
+    }
   });
 
   // main
