@@ -1,14 +1,19 @@
 /* heyMikeNauman  */
 body {
-  background-color: blue;
+  background-color: DarkGray;
   font-family: arial;
 }
 
 h2 {
   color: black;
+  background-color: white;
+  margin: 20px;
+  width: 50%;
 }
 
 textarea {
+  margin: 10px;
+  margin-left: 20px;
   font-size: 26px;
 }
 
@@ -46,6 +51,14 @@ td {
   width: 30%;
   background: gray;
   display: inline-block;
+}
+
+#readyButton, #nameButton {
+  width: 75px;
+  height: 40px;
+  margin: 10px;
+  margin-left: 20px;
+  border-radius: 5px;
 }
 
 #gameBoard {
