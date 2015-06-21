@@ -7,6 +7,7 @@ $( document ).ready(function() {
   var playerName2 = null;
   var currentPlayer = null;
   var currentTurn = false;
+  var gameBoard = [];
 
   function initialGameBoardSetup() {
     document.getElementById("readyButton").hidden=true;
@@ -43,15 +44,12 @@ $( document ).ready(function() {
   }
 
   function setupForPlacePieces() {
-    var gameBoard = createGameBoardArr();
+    gameBoard = createGameBoardArr();
     document.getElementById("textArea").remove();
     document.getElementById("nameButton").remove();
     document.getElementById("readyButton").hidden=false;
     document.getElementById("gameBoard").hidden=false;
     document.getElementById("row1").hidden=false;
-
-    var allPageTDs = document.getElementsByTagName("td");
-
     $('td').addClass('snapable');
     $('#playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
     $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
@@ -109,20 +107,25 @@ $( document ).ready(function() {
   function createGameBoardArr() {
     var gameBoardArr = [];
 
-    function Cell(occupied, team, value, x, y) {
+    function Cell(rank, playerName, pieceValue, x, y) {
       this.x = x;
       this.y = y;
-      this.occupied = occupied;
-      this.team = team;
-      this.value = value;
+      this.rank = rank;
+      this.playerName = playerName
+      this.pieceValue = pieceValue;
     }
 
     for (var i = 1; i < 11; i++){
       for (var j = 1; j < 11; j++) {
-        gameBoardArr.push(new Cell(false, false, false, j, i));
+        gameBoardArr.push(new Cell(null, null, null, j, i));
       }
     }
     return gameBoardArr;
+  }
+
+  function updateGameObject(turnObj) {
+    console.log(gameBoard);
+    console.log(turnObj);
   }
 
   function loadListeners() {
@@ -165,6 +168,7 @@ $( document ).ready(function() {
           pieceValue: ui.draggable[0].dataset.piecevalue
         }
         socket.emit('gamePiecePlaced', pieceDropObj);
+        updateGameObject(pieceDropObj);
       }
     });
   }
