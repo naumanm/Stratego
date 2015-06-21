@@ -54,16 +54,8 @@ td {
   background-color: white;
 }
 
-.row1{
-  border-radius: 5px;
-  width: 95%;
-  height: 525px;
-  background-color: White;
-  margin:10px;
-  padding: 5px;
-}
 
-.rightMenu {
+#rightMenu {
   border-radius: 5px;
   margin: 30px;
   padding: 20px;
@@ -72,6 +64,16 @@ td {
   background: gray;
   display: inline-block;
 }
+
+#row1{
+  border-radius: 5px;
+  width: 95%;
+  height: 525px;
+  background-color: White;
+  margin:10px;
+  padding: 5px;
+}
+
 
 #readyButton, #nameButton {
   width: 75px;

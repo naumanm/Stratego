@@ -38,7 +38,7 @@ function configSocketIO() {
         io.emit('playerName2', playerName2);
         console.log(playerName1);
         console.log(playerName2);
-        setGameBoard(playerName1, playerName2);
+        createGameAndTeamObjects(playerName1, playerName2);
       } else {
         io.emit('gameLocked', 'locked');
         console.log('Locking out additional players');
@@ -47,13 +47,13 @@ function configSocketIO() {
 
     socket.on('player1Ready', function(value){
       player1Ready = true;
-      // update gameBoard, teamA, teamB
+      console.log(value);
       checkReady();
     });
 
     socket.on('player2Ready', function(value){
       player2Ready = true;
-      // update gameBoard, teamA, teamB
+      console.log(value);
       checkReady();
     });
 
@@ -78,8 +78,9 @@ function configSocketIO() {
   });
 }
 
-function setGameBoard(player1, player2) {
-  io.emit('setBoard', true);
+function createGameAndTeamObjects(player1, player2) {
+  console.log('Place game pieces');
+  //io.emit('setBoard', true);
   gameBoard = createGameBoard();
   teamA = createTeam();
   teamB = createTeam();

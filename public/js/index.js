@@ -10,19 +10,16 @@ $( document ).ready(function() {
 
   document.getElementById("readyButton").hidden=true;
   document.getElementById("gameBoard").hidden=true;
+  document.getElementById("row1").hidden=true;
 
   function comunicator() {
 
+    // set name
     document.getElementById("nameButton").addEventListener("click", function( event ) {
       var name = document.getElementById("textArea").value;
       currentPlayer = name;
       socket.emit('playerName', name);
-      document.getElementById("textArea").remove();
-      document.getElementById("nameButton").remove();
-      document.getElementById("readyButton").hidden=false;
-      document.getElementById("gameBoard").hidden=false;
-      $('#playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
-      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
+      setupForPlacePieces();
     }, false);
 
     document.getElementById("readyButton").addEventListener("click", function( event ) {
@@ -33,6 +30,8 @@ $( document ).ready(function() {
       }
       document.getElementById("readyButton").remove();
       document.getElementById("gameBoard").hidden=false;
+      document.getElementById("rightMenu").hidden=false;
+
       $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Board is locked'));
     }, false);
 
@@ -44,10 +43,6 @@ $( document ).ready(function() {
     socket.on('playerName2', function(name){
       setName('playerName2', name);
       playerName2 = name;
-    });
-
-    socket.on('setBoard', function(value){
-      setUIForGame();
     });
 
     socket.on('gameBoardLocked', function(value) {
@@ -97,9 +92,14 @@ $( document ).ready(function() {
       return gameBoardArr;
     }
 
-    function setUIForGame() {
+    function setupForPlacePieces() {
       var gameBoard = createGameBoardArr();
+      document.getElementById("textArea").remove();
+      document.getElementById("nameButton").remove();
+      document.getElementById("readyButton").hidden=false;
       document.getElementById("gameBoard").hidden=false;
+      document.getElementById("row1").hidden=false;
+      $('#playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
       $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
     }
   }
