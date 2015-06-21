@@ -6,9 +6,11 @@
     <title>Stratego</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link rel="stylesheet" href="/css/main.css">
-    </head>
-  <body>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  </head>
 
+  <body>
     <div class='banner'>
       <h2 id='playerName'>Welcome!</h2>
       <h2 id='gameMessage'>Please enter your name</h2>
@@ -146,8 +148,27 @@
       </div>
 
       <div class="rightMenu">
+        <table>
+          <tr>
+            <td>
+              <div class='general cell'></div>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
       </div>
     </div>
+
+
+    <script>$( ".cell" ).draggable();</script>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/index.js"></script>

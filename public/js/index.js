@@ -71,6 +71,7 @@ $( document ).ready(function() {
         currentTurn = false;
         $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + object.player));
       }
+
     });
 
     function setName(playerName, name) {
@@ -126,8 +127,14 @@ $( document ).ready(function() {
     }
   });
 
+  // gameboard setup
+
+  $( ".cell" ).draggable();
+
+
   // main
   document.getElementById("gameBoard").hidden=true;
   comunicator();
+
 
 });
