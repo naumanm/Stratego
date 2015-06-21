@@ -65,6 +65,12 @@ function configSocketIO() {
     socket.on('disconnect', function(){
       console.log('user disconnected');
     });
+
+    socket.on('gamePiecePlaced', function(value){
+       console.log(value);
+    });
+
+
   });
 
   http.listen(3000, function(){

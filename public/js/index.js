@@ -129,8 +129,26 @@ $( document ).ready(function() {
 
   // gameboard setup
 
-  $( ".cell" ).draggable();
+  $( ".cell" ).draggable({
+    snap: ".snapCell",
+    snapMode: "inner",
+    containment: "#gameBoard"
+    // grid: [13, 13]
+  });
 
+  $( "td" ).droppable({
+    drop: function( event, ui ) {
+      var pieceDropObj = {
+        // player: currentPlayer;
+        rank: ui.draggable[0].dataset.rank,
+        xposition: event.target.dataset.idx,
+        yposition: event.target.dataset.idy,
+        pieceValue: ui.draggable[0].dataset.piecevalue
+      }
+      console.log(pieceDropObj);
+      socket.emit('gamePiecePlaced', pieceDropObj);
+    }
+  });
 
   // main
   document.getElementById("gameBoard").hidden=true;
