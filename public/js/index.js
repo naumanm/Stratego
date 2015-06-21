@@ -14,28 +14,22 @@ $( document ).ready(function() {
     document.getElementById("row1").hidden=true;
   }
 
-  function comunicator() {
-
+  function communicator() {
     document.getElementById("nameButton").addEventListener("click", function( event ) {
       setPlayerName();
     }, false);
-
     document.getElementById("readyButton").addEventListener("click", function( event ) {
       setGameboardReady();
     }, false);
-
     socket.on('playerName1', function(name){
       setName('playerName1', name);
     });
-
     socket.on('playerName2', function(name){
       setName('playerName2', name);
     });
-
     socket.on('gameBoardLocked', function(value) {
       firstTurnContoller();
     });
-
     socket.on('fromServerToClientTurn', function(object) {
       turnController(object);
     });
@@ -55,6 +49,10 @@ $( document ).ready(function() {
     document.getElementById("readyButton").hidden=false;
     document.getElementById("gameBoard").hidden=false;
     document.getElementById("row1").hidden=false;
+
+    var allPageTDs = document.getElementsByTagName("td");
+
+    $('td').addClass('snapable');
     $('#playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
     $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
   }
@@ -87,7 +85,6 @@ $( document ).ready(function() {
   }
 
   function firstTurnContoller() {
-    console.log("first turn");
     document.getElementById("playerName").remove();
     if (currentPlayer === playerName1) {
       currentTurn = true
@@ -128,55 +125,54 @@ $( document ).ready(function() {
     return gameBoardArr;
   }
 
-  // gameboard effects
-  $("td").mouseover(function(event){
-    if (currentTurn) {
-      $(this).css("background-color", "red");
-    }
-  });
-
-  $("td").mouseleave(function(event){
-    if (currentTurn) {
-      $(this).css("background-color", "lightyellow");
-    }
-  });
-
-  $("td").click(function(event){
-    if (currentTurn) {
-      var x = event.target.dataset.idx;
-      var y = event.target.dataset.idy;
-      var pieceValue = event.target.dataset.value;
-      shotObj = {player: currentPlayer, idx: x, idy: y, turnValue: pieceValue};
-      $(this).css("background-color", "lightyellow");
-      socket.emit('fromClientToServerTurn', shotObj);
-    }
-  });
-
-  $( ".cell" ).draggable({
-    snap: ".snapCell",
-    snapMode: "inner",
-    containment: "#gameBoard"
-    // grid: [13, 13]
-  });
-
-  $( "td" ).droppable({
-    drop: function( event, ui ) {
-      var pieceDropObj = {
-        // player: currentPlayer;
-        rank: ui.draggable[0].dataset.rank,
-        xposition: event.target.dataset.idx,
-        yposition: event.target.dataset.idy,
-        pieceValue: ui.draggable[0].dataset.piecevalue
+  function loadListeners() {
+    $("td").mouseover(function(event){
+      if (currentTurn) {
+        $(this).css("background-color", "red");
       }
-      console.log(pieceDropObj);
-      socket.emit('gamePiecePlaced', pieceDropObj);
-    }
-  });
+    });
+
+    $("td").mouseleave(function(event){
+      if (currentTurn) {
+        $(this).css("background-color", "lightyellow");
+      }
+    });
+
+    $("td").click(function(event){
+      if (currentTurn) {
+        var x = event.target.dataset.idx;
+        var y = event.target.dataset.idy;
+        var pieceValue = event.target.dataset.value;
+        shotObj = {player: currentPlayer, idx: x, idy: y, turnValue: pieceValue};
+        $(this).css("background-color", "lightyellow");
+        socket.emit('fromClientToServerTurn', shotObj);
+      }
+    });
+
+    $( ".gamePiece" ).draggable({
+      snap: ".snapable",
+      snapMode: "inner",
+      containment: "#gameBoard"
+    });
+
+    $( "td" ).droppable({
+      drop: function( event, ui ) {
+        var pieceDropObj = {
+          player: currentPlayer,
+          rank: ui.draggable[0].dataset.rank,
+          xposition: event.target.dataset.idx,
+          yposition: event.target.dataset.idy,
+          pieceValue: ui.draggable[0].dataset.piecevalue
+        }
+        socket.emit('gamePiecePlaced', pieceDropObj);
+      }
+    });
+  }
 
   // main
 
   initialGameBoardSetup();
-  comunicator();
-
+  communicator();
+  loadListeners();
 
 });
