@@ -8,48 +8,37 @@ $( document ).ready(function() {
   var currentPlayer = null;
   var currentTurn = false;
 
+  function initialGameBoardSetup() {
+    document.getElementById("readyButton").hidden=true;
+    document.getElementById("gameBoard").hidden=true;
+    document.getElementById("row1").hidden=true;
+  }
+
   function comunicator() {
 
-    // set player name
     document.getElementById("nameButton").addEventListener("click", function( event ) {
       setPlayerName();
     }, false);
 
-    // set gameboard ready
     document.getElementById("readyButton").addEventListener("click", function( event ) {
-      document.getElementById("readyButton").remove();
-      document.getElementById("gameBoard").hidden=false;
-      document.getElementById("rightMenu").hidden=false;
-      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Board is locked'));
-      if (playerName1 === currentPlayer) {
-        playerReady('1');
-      } else if (playerName2 === currentPlayer) {
-        playerReady('2');
-      }
+      setGameboardReady();
     }, false);
 
     socket.on('playerName1', function(name){
       setName('playerName1', name);
-      playerName1 = name;
     });
 
     socket.on('playerName2', function(name){
       setName('playerName2', name);
-      playerName2 = name;
     });
 
     socket.on('gameBoardLocked', function(value) {
       firstTurnContoller();
     });
 
-    // listens for the other persons shot
     socket.on('fromServerToClientTurn', function(object) {
       turnController(object);
     });
-  }
-
-  function setName(playerName, name) {
-    socket.emit(playerName, name);
   }
 
   function setPlayerName() {
@@ -59,9 +48,40 @@ $( document ).ready(function() {
     socket.emit('playerName', name);
   }
 
+  function setupForPlacePieces() {
+    var gameBoard = createGameBoardArr();
+    document.getElementById("textArea").remove();
+    document.getElementById("nameButton").remove();
+    document.getElementById("readyButton").hidden=false;
+    document.getElementById("gameBoard").hidden=false;
+    document.getElementById("row1").hidden=false;
+    $('#playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
+    $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
+  }
+
+  function setGameboardReady() {
+    document.getElementById("readyButton").remove();
+    document.getElementById("gameBoard").hidden=false;
+    document.getElementById("rightMenu").hidden=false;
+    $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Board is locked'));
+    if (playerName1 === currentPlayer) {
+      playerReady('1');
+    } else if (playerName2 === currentPlayer) {
+      playerReady('2');
+    }
+  }
+
+  function setName(playerName, name) {
+    socket.emit(playerName, name);
+    if  {
+      playerName1 = name;
+    } else if (playerName = 'playerName2') {
+      playerName2 = name;
+    }
+  }
+
   function playerReady(value) {
     var player = 'player' + value + 'Ready';
-    console.log(player);
     var player1GameObj = {}
     socket.emit(player, player1GameObj);
   }
@@ -107,24 +127,6 @@ $( document ).ready(function() {
     }
     return gameBoardArr;
   }
-
-  function initialGameBoardSetup() {
-    document.getElementById("readyButton").hidden=true;
-    document.getElementById("gameBoard").hidden=true;
-    document.getElementById("row1").hidden=true;
-  }
-
-  function setupForPlacePieces() {
-    var gameBoard = createGameBoardArr();
-    document.getElementById("textArea").remove();
-    document.getElementById("nameButton").remove();
-    document.getElementById("readyButton").hidden=false;
-    document.getElementById("gameBoard").hidden=false;
-    document.getElementById("row1").hidden=false;
-    $('#playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
-    $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
-  }
-
 
   // gameboard effects
   $("td").mouseover(function(event){
