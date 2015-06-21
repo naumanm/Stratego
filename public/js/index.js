@@ -73,7 +73,7 @@ $( document ).ready(function() {
 
   function setName(playerName, name) {
     socket.emit(playerName, name);
-    if  {
+    if (playerName === 'playerName1') {
       playerName1 = name;
     } else if (playerName = 'playerName2') {
       playerName2 = name;
