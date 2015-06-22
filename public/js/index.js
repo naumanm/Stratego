@@ -125,14 +125,21 @@ $( document ).ready(function() {
   }
 
   function updateGameObject(turnObj) {
+    var testBoard ={};
 
-    // need to find and remove turnObj from gameBoard
+    testBoard = gameBoard.filter(function(obj) {
+        var x = obj.xposition;
+        var y = obj.yposition;
+        return !(x in gameBoard && y in gameBoard);
+    });
 
-    gameBoard.push(new Cell(turnObj.rank, turnObj.player, turnObj.pieceValue, turnObj.xposition, turnObj.yposition));
+    testBoard.push(new Cell(turnObj.rank, turnObj.player, turnObj.pieceValue, turnObj.xposition, turnObj.yposition));
 
     console.log(turnObj);
     console.log(gameBoard);
     console.log(gameBoard.length);
+    console.log(testBoard);
+    console.log(testBoard.length);
   }
 
   function loadListeners() {
