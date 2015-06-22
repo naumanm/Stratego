@@ -104,16 +104,17 @@ $( document ).ready(function() {
     }
   }
 
+  function Cell(rank, playerName, pieceValue, x, y) {
+    this.x = x;
+    this.y = y;
+    this.rank = rank;
+    this.playerName = playerName
+    this.pieceValue = pieceValue;
+    return this;
+  }
+
   function createGameBoardArr() {
     var gameBoardArr = [];
-
-    function Cell(rank, playerName, pieceValue, x, y) {
-      this.x = x;
-      this.y = y;
-      this.rank = rank;
-      this.playerName = playerName
-      this.pieceValue = pieceValue;
-    }
 
     for (var i = 1; i < 11; i++){
       for (var j = 1; j < 11; j++) {
@@ -124,8 +125,14 @@ $( document ).ready(function() {
   }
 
   function updateGameObject(turnObj) {
-    console.log(gameBoard);
+
+    // need to find and remove turnObj from gameBoard
+
+    gameBoard.push(new Cell(turnObj.rank, turnObj.player, turnObj.pieceValue, turnObj.xposition, turnObj.yposition));
+
     console.log(turnObj);
+    console.log(gameBoard);
+    console.log(gameBoard.length);
   }
 
   function loadListeners() {
