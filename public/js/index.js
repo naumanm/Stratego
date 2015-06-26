@@ -1,8 +1,12 @@
 // Stratego, by heyMikeNauman
 
-$( document ).ready(function() {
+window.onload = function() {
+  // main
+  initialGameBoardSetup();
+  communicator();
+  loadListeners();
 
-  var socket = io();
+  // globals
   var playerName1 = null;
   var playerName2 = null;
   var currentPlayer = null;
@@ -16,6 +20,7 @@ $( document ).ready(function() {
   }
 
   function communicator() {
+    var socket = io();
     document.getElementById("nameButton").addEventListener("click", function( event ) {
       setPlayerName();
     }, false);
@@ -37,6 +42,7 @@ $( document ).ready(function() {
   }
 
   function setPlayerName() {
+    var socket = io();
     var name = document.getElementById("textArea").value;
     currentPlayer = name;
     setupForPlacePieces();
@@ -68,6 +74,7 @@ $( document ).ready(function() {
   }
 
   function setName(playerName, name) {
+    var socket = io();
     socket.emit(playerName, name);
     if (playerName === 'playerName1') {
       playerName1 = name;
@@ -77,6 +84,7 @@ $( document ).ready(function() {
   }
 
   function playerReady(value) {
+    var socket = io();
     var player = 'player' + value + 'Ready';
     var player1GameObj = {}
     socket.emit(player, player1GameObj);
@@ -157,6 +165,7 @@ $( document ).ready(function() {
 
     $("td").click(function(event){
       if (currentTurn) {
+        var socket = io();
         var x = event.target.dataset.idx;
         var y = event.target.dataset.idy;
         var pieceValue = event.target.dataset.value;
@@ -174,6 +183,7 @@ $( document ).ready(function() {
 
     $( "td" ).droppable({
       drop: function( event, ui ) {
+        var socket = io();
         var pieceDropObj = {
           player: currentPlayer,
           rank: ui.draggable[0].dataset.rank,
@@ -187,10 +197,4 @@ $( document ).ready(function() {
     });
   }
 
-  // main
-
-  initialGameBoardSetup();
-  communicator();
-  loadListeners();
-
-});
+};
