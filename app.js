@@ -80,7 +80,6 @@ function configSocketIO() {
 
 function createGameAndTeamObjects(player1, player2) {
   console.log('Place game pieces');
-  //io.emit('setBoard', true);
   gameBoard = createGameBoard();
   teamA = createTeam();
   teamB = createTeam();

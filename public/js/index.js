@@ -20,33 +20,31 @@ window.onload = function() {
   }
 
   function communicator() {
-    var socket = io();
     document.getElementById("nameButton").addEventListener("click", function( event ) {
       setPlayerName();
     }, false);
     document.getElementById("readyButton").addEventListener("click", function( event ) {
       setGameboardReady();
     }, false);
-    socket.on('playerName1', function(name){
+    io().on('playerName1', function(name){
       setName('playerName1', name);
     });
-    socket.on('playerName2', function(name){
+    io().on('playerName2', function(name){
       setName('playerName2', name);
     });
-    socket.on('gameBoardLocked', function(value) {
+    io().on('gameBoardLocked', function(value) {
       firstTurnContoller();
     });
-    socket.on('fromServerToClientTurn', function(object) {
+    io().on('fromServerToClientTurn', function(object) {
       turnController(object);
     });
   }
 
   function setPlayerName() {
-    var socket = io();
     var name = document.getElementById("textArea").value;
     currentPlayer = name;
     setupForPlacePieces();
-    socket.emit('playerName', name);
+    io().emit('playerName', name);
   }
 
   function setupForPlacePieces() {
@@ -56,16 +54,24 @@ window.onload = function() {
     document.getElementById("readyButton").hidden=false;
     document.getElementById("gameBoard").hidden=false;
     document.getElementById("row1").hidden=false;
-    $('td').addClass('snapable');
-    $('#playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
-    $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
+
+
+    // need to restrict this to only the 4x10
+    //$('td').addClass('snapable');
+
+//    document.getElementsByTagName("td").classList.add("snapable");
+
+    document.getElementsByTagName("td").classList.add("snapable");
+
+    document.getElementById('playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
+    document.getElementById('gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
   }
 
   function setGameboardReady() {
     document.getElementById("readyButton").remove();
     document.getElementById("gameBoard").hidden=false;
     document.getElementById("rightMenu").hidden=false;
-    $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Board is locked'));
+    document.getElementById("gameMessage").replaceWith($('<h2 id="gameMessage">').text('Board is locked'));
     if (playerName1 === currentPlayer) {
       playerReady('1');
     } else if (playerName2 === currentPlayer) {
@@ -74,8 +80,7 @@ window.onload = function() {
   }
 
   function setName(playerName, name) {
-    var socket = io();
-    socket.emit(playerName, name);
+    io().emit(playerName, name);
     if (playerName === 'playerName1') {
       playerName1 = name;
     } else if (playerName = 'playerName2') {
@@ -84,20 +89,19 @@ window.onload = function() {
   }
 
   function playerReady(value) {
-    var socket = io();
     var player = 'player' + value + 'Ready';
     var player1GameObj = {}
-    socket.emit(player, player1GameObj);
+    io().emit(player, player1GameObj);
   }
 
   function firstTurnContoller() {
     document.getElementById("playerName").remove();
     if (currentPlayer === playerName1) {
       currentTurn = true
-      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(playerName1 + ' your shot!'));
+      document.getElementById('gameMessage').replaceWith($('<h2 id="gameMessage">').text(playerName1 + ' your shot!'));
     } else {
       currentTurn = false;
-      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + playerName1));
+      document.getElementById('gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + playerName1));
     }
   }
 
@@ -105,10 +109,10 @@ window.onload = function() {
     console.log(object);
     if (currentPlayer === object.player) {
       currentTurn = true;
-      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(object.player + ' your shot!'));
+      document.getElementById('gameMessage').replaceWith($('<h2 id="gameMessage">').text(object.player + ' your shot!'));
     } else {
       currentTurn = false;
-      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + object.player));
+      document.getElementById('gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + object.player));
     }
   }
 
@@ -153,6 +157,7 @@ window.onload = function() {
   function loadListeners() {
     $("td").mouseover(function(event){
       if (currentTurn) {
+        console.log(this);
         $(this).css("background-color", "red");
       }
     });
@@ -165,13 +170,12 @@ window.onload = function() {
 
     $("td").click(function(event){
       if (currentTurn) {
-        var socket = io();
         var x = event.target.dataset.idx;
         var y = event.target.dataset.idy;
         var pieceValue = event.target.dataset.value;
         shotObj = {player: currentPlayer, idx: x, idy: y, turnValue: pieceValue};
         $(this).css("background-color", "lightyellow");
-        socket.emit('fromClientToServerTurn', shotObj);
+        io().emit('fromClientToServerTurn', shotObj);
       }
     });
 
@@ -183,7 +187,6 @@ window.onload = function() {
 
     $( "td" ).droppable({
       drop: function( event, ui ) {
-        var socket = io();
         var pieceDropObj = {
           player: currentPlayer,
           rank: ui.draggable[0].dataset.rank,
@@ -191,7 +194,7 @@ window.onload = function() {
           yposition: event.target.dataset.idy,
           pieceValue: ui.draggable[0].dataset.piecevalue
         }
-        socket.emit('gamePiecePlaced', pieceDropObj);
+        io().emit('gamePiecePlaced', pieceDropObj);
         updateGameObject(pieceDropObj);
       }
     });
