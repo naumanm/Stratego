@@ -74,7 +74,7 @@ window.onload = function() {
     document.getElementById("readyButton").remove();
     document.getElementById("gameBoard").hidden=false;
     document.getElementById("rightMenu").hidden=false;
-    document.getElementById("gameMessage").replaceWith($('<h2 id="gameMessage">').text('Board is locked'));
+    document.getElementById("gameMessage").innerHTML = 'Board is locked';
     if (playerName1 === currentPlayer) {
       playerReady('1');
     } else if (playerName2 === currentPlayer) {
@@ -101,10 +101,10 @@ window.onload = function() {
     document.getElementById("playerName").remove();
     if (currentPlayer === playerName1) {
       currentTurn = true
-      document.getElementById('gameMessage').replaceWith($('<h2 id="gameMessage">').text(playerName1 + ' your shot!'));
+      document.getElementById("gameMessage").innerHTML = playerName1 + ' your shot!';
     } else {
       currentTurn = false;
-      document.getElementById('gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + playerName1));
+      document.getElementById("gameMessage").innerHTML = 'Waiting for ' + playerName1;
     }
   }
 
@@ -112,10 +112,11 @@ window.onload = function() {
     console.log(object);
     if (currentPlayer === object.player) {
       currentTurn = true;
-      document.getElementById('gameMessage').replaceWith($('<h2 id="gameMessage">').text(object.player + ' your shot!'));
+      document.getElementById("gameMessage").innerHTML =     document.getElementById("gameMessage").innerHTML = 'Waiting for ' + object.player;
+ + ' your shot!';
     } else {
       currentTurn = false;
-      document.getElementById('gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + object.player));
+      document.getElementById("gameMessage").innerHTML = 'Waiting for ' + object.player;
     }
   }
 
