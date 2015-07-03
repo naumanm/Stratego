@@ -62,14 +62,15 @@ function configSocketIO() {
       io.emit('fromServerToClientTurn', turnController(object));
     });
 
-    socket.on('disconnect', function(){
-      console.log('user disconnected');
-    });
-
     socket.on('gamePiecePlaced', function(value){
        console.log(value);
     });
 
+    socket.on('disconnect', function(){
+      console.log('user disconnected, NEED TO RESET');
+      resetGame();
+      io.emit('reset game', function (value){});
+    });
 
   });
 
@@ -164,6 +165,11 @@ function createTeam() {
 
   return teamArr;
 }
+
+function resetGame() {
+
+}
+
 
 // MAIN
 setUp();

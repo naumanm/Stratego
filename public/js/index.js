@@ -38,7 +38,14 @@ window.onload = function() {
     io().on('fromServerToClientTurn', function(object) {
       turnController(object);
     });
+    io().on('reset game', function (value){
+      resetGame();
+    });
   }
+
+  function resetGame() {
+    // alert and reload page to name prompt
+   }
 
   function setPlayerName() {
     var name = document.getElementById("textArea").value;
@@ -57,14 +64,10 @@ window.onload = function() {
 
 
     // need to restrict this to only the 4x10
-    //$('td').addClass('snapable');
+    $('td').addClass('snapable');
 
-//    document.getElementsByTagName("td").classList.add("snapable");
-
-    document.getElementsByTagName("td").classList.add("snapable");
-
-    document.getElementById('playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
-    document.getElementById('gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
+    $('#playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
+    $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
   }
 
   function setGameboardReady() {
