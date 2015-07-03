@@ -1,133 +1,207 @@
 // Stratego, by heyMikeNauman
 
-$( document ).ready(function() {
+window.onload = function() {
+  // main
+  initialGameBoardSetup();
+  communicator();
+  loadListeners();
 
-  var socket = io();
+  // globals
   var playerName1 = null;
   var playerName2 = null;
   var currentPlayer = null;
   var currentTurn = false;
+  var gameBoard = [];
 
-  document.getElementById("readyButton").hidden=true;
-  document.getElementById("gameBoard").hidden=true;
+  function initialGameBoardSetup() {
+    document.getElementById("readyButton").hidden=true;
+    document.getElementById("gameBoard").hidden=true;
+    document.getElementById("row1").hidden=true;
+  }
 
-  function comunicator() {
-
+  function communicator() {
     document.getElementById("nameButton").addEventListener("click", function( event ) {
-      var name = document.getElementById("textArea").value;
-      currentPlayer = name;
-      socket.emit('playerName', name);
-      document.getElementById("textArea").remove();
-      document.getElementById("nameButton").remove();
-      document.getElementById("readyButton").hidden=false;
-      document.getElementById("gameBoard").hidden=false;
-      $('#playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
-      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
+      setPlayerName();
     }, false);
-
     document.getElementById("readyButton").addEventListener("click", function( event ) {
-      if (playerName1 === currentPlayer) {
-        socket.emit('player1Ready', 'true');
-      } else if (playerName2 === currentPlayer) {
-        socket.emit('player2Ready', 'true');
-      }
-      document.getElementById("readyButton").remove();
-      document.getElementById("gameBoard").hidden=false;
-      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Board is locked'));
+      setGameboardReady();
     }, false);
-
-    socket.on('playerName1', function(name){
+    io().on('playerName1', function(name){
       setName('playerName1', name);
-      playerName1 = name;
     });
-
-    socket.on('playerName2', function(name){
+    io().on('playerName2', function(name){
       setName('playerName2', name);
-      playerName2 = name;
     });
-
-    socket.on('setBoard', function(value){
-      setUIForGame();
+    io().on('gameBoardLocked', function(value) {
+      firstTurnContoller();
     });
-
-    socket.on('gameBoardLocked', function(value) {
-      document.getElementById("playerName").remove();
-      if (currentPlayer === playerName1) {
-        currentTurn = true
-        $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(playerName1 + ' your shot!'));
-      } else {
-        currentTurn = false;
-        $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + playerName1));
-      }
+    io().on('fromServerToClientTurn', function(object) {
+      turnController(object);
     });
-
-    // listens for the other persons shot
-    socket.on('fromServerToClientTurn', function(object) {
-      console.log(object);
-      if (currentPlayer === object.player) {
-        currentTurn = true;
-        $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text(object.player + ' your shot!'));
-      } else {
-        currentTurn = false;
-        $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Waiting for ' + object.player));
-      }
+    io().on('reset game', function (value){
+      resetGame();
     });
+  }
 
-    function setName(playerName, name) {
-      socket.emit(playerName, name);
-    }
+  function resetGame() {
+    // alert and reload page to name prompt
+   }
 
-    function createGameBoardArr() {
-      var gameBoardArr = [];
+  function setPlayerName() {
+    var name = document.getElementById("textArea").value;
+    currentPlayer = name;
+    setupForPlacePieces();
+    io().emit('playerName', name);
+  }
 
-      function Cell(occupied, team, value, x, y) {
-        this.x = x;
-        this.y = y;
-        this.occupied = occupied;
-        this.team = team;
-        this.value = value;
-      }
+  function setupForPlacePieces() {
+    gameBoard = createGameBoardArr();
+    document.getElementById("textArea").remove();
+    document.getElementById("nameButton").remove();
+    document.getElementById("readyButton").hidden=false;
+    document.getElementById("gameBoard").hidden=false;
+    document.getElementById("row1").hidden=false;
 
-      for (var i = 1; i < 11; i++){
-        for (var j = 1; j < 11; j++) {
-          gameBoardArr.push(new Cell(false, false, false, j, i));
-        }
-      }
-      return gameBoardArr;
-    }
 
-    function setUIForGame() {
-      var gameBoard = createGameBoardArr();
-      document.getElementById("gameBoard").hidden=false;
-      $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
+    // need to restrict this to only the 4x10
+    $('td').addClass('snapable');
+
+    $('#playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
+    $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
+  }
+
+  function setGameboardReady() {
+    document.getElementById("readyButton").remove();
+    document.getElementById("gameBoard").hidden=false;
+    document.getElementById("rightMenu").hidden=false;
+    document.getElementById("gameMessage").innerHTML = 'Board is locked';
+    if (playerName1 === currentPlayer) {
+      playerReady('1');
+    } else if (playerName2 === currentPlayer) {
+      playerReady('2');
     }
   }
 
-  $("td").mouseover(function(event){
-    if (currentTurn) {
-      $(this).css("background-color", "red");
+  function setName(playerName, name) {
+    io().emit(playerName, name);
+    if (playerName === 'playerName1') {
+      playerName1 = name;
+    } else if (playerName = 'playerName2') {
+      playerName2 = name;
     }
-  });
+  }
 
-  $("td").mouseleave(function(event){
-    if (currentTurn) {
-      $(this).css("background-color", "lightyellow");
+  function playerReady(value) {
+    var player = 'player' + value + 'Ready';
+    var player1GameObj = {}
+    io().emit(player, player1GameObj);
+  }
+
+  function firstTurnContoller() {
+    document.getElementById("playerName").remove();
+    if (currentPlayer === playerName1) {
+      currentTurn = true
+      document.getElementById("gameMessage").innerHTML = playerName1 + ' your shot!';
+    } else {
+      currentTurn = false;
+      document.getElementById("gameMessage").innerHTML = 'Waiting for ' + playerName1;
     }
-  });
+  }
 
-  $("td").click(function(event){
-    if (currentTurn) {
-      var x = event.target.dataset.idx;
-      var y = event.target.dataset.idy;
-      var pieceValue = event.target.dataset.value;
-      shotObj = {player: currentPlayer, idx: x, idy: y, turnValue: pieceValue};
-      $(this).css("background-color", "lightyellow");
-      socket.emit('fromClientToServerTurn', shotObj);
+  function turnController(object) {
+    console.log(object);
+    if (currentPlayer === object.player) {
+      currentTurn = true;
+      document.getElementById("gameMessage").innerHTML =     document.getElementById("gameMessage").innerHTML = 'Waiting for ' + object.player;
+ + ' your shot!';
+    } else {
+      currentTurn = false;
+      document.getElementById("gameMessage").innerHTML = 'Waiting for ' + object.player;
     }
-  });
+  }
 
-  // main
-  document.getElementById("gameBoard").hidden=true;
-  comunicator();
+  function Cell(rank, playerName, pieceValue, x, y) {
+    this.x = x;
+    this.y = y;
+    this.rank = rank;
+    this.playerName = playerName
+    this.pieceValue = pieceValue;
+    return this;
+  }
 
-});
+  function createGameBoardArr() {
+    var gameBoardArr = [];
+
+    for (var i = 1; i < 11; i++){
+      for (var j = 1; j < 11; j++) {
+        gameBoardArr.push(new Cell(null, null, null, j, i));
+      }
+    }
+    return gameBoardArr;
+  }
+
+  function updateGameObject(turnObj) {
+    var testBoard ={};
+
+    testBoard = gameBoard.filter(function(obj) {
+        var x = obj.xposition;
+        var y = obj.yposition;
+        return !(x in gameBoard && y in gameBoard);
+    });
+
+    testBoard.push(new Cell(turnObj.rank, turnObj.player, turnObj.pieceValue, turnObj.xposition, turnObj.yposition));
+
+    console.log(turnObj);
+    console.log(gameBoard);
+    console.log(gameBoard.length);
+    console.log(testBoard);
+    console.log(testBoard.length);
+  }
+
+  function loadListeners() {
+    $("td").mouseover(function(event){
+      if (currentTurn) {
+        console.log(this);
+        $(this).css("background-color", "red");
+      }
+    });
+
+    $("td").mouseleave(function(event){
+      if (currentTurn) {
+        $(this).css("background-color", "lightyellow");
+      }
+    });
+
+    $("td").click(function(event){
+      if (currentTurn) {
+        var x = event.target.dataset.idx;
+        var y = event.target.dataset.idy;
+        var pieceValue = event.target.dataset.value;
+        shotObj = {player: currentPlayer, idx: x, idy: y, turnValue: pieceValue};
+        $(this).css("background-color", "lightyellow");
+        io().emit('fromClientToServerTurn', shotObj);
+      }
+    });
+
+    $( ".gamePiece" ).draggable({
+      snap: ".snapable",
+      snapMode: "inner",
+      containment: "#gameBoard"
+    });
+
+    $( "td" ).droppable({
+      drop: function( event, ui ) {
+        var pieceDropObj = {
+          player: currentPlayer,
+          rank: ui.draggable[0].dataset.rank,
+          xposition: event.target.dataset.idx,
+          yposition: event.target.dataset.idy,
+          pieceValue: ui.draggable[0].dataset.piecevalue
+        }
+        io().emit('gamePiecePlaced', pieceDropObj);
+        updateGameObject(pieceDropObj);
+      }
+    });
+  }
+
+};

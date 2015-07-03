@@ -5,10 +5,12 @@
   <head>
     <title>Stratego</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <link rel="stylesheet" href="/css/main.css">
-    </head>
-  <body>
+    <link href="/css/main.css" rel="stylesheet" type="text/css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  </head>
 
+  <body>
     <div class='banner'>
       <h2 id='playerName'>Welcome!</h2>
       <h2 id='gameMessage'>Please enter your name</h2>
@@ -18,7 +20,7 @@
       <button id='readyButton'>Ready</button>
     </div>
 
-    <div class='row1'>
+    <div id='row1'>
       <div id='gameBoard' hidden=true>
         <table>
           <tr>
@@ -145,7 +147,57 @@
 
       </div>
 
-      <div class="rightMenu">
+      <div id="rightMenu">
+        <table>
+          <tr>
+            <td>
+              <div class='gamePiece' data-rank='Marshal' data-pieceValue='1'>1</div>
+            </td>
+            <td>
+              <div class='gamePiece' data-rank='General' data-pieceValue='2'>2</div>
+            </td>
+            <td>
+              <div class='gamePiece' data-rank='Colonel' data-pieceValue='3'>3</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class='gamePiece' data-rank='Major' data-pieceValue='4'>4</div>
+            </td>
+            <td>
+              <div class='gamePiece' data-rank='Captain' data-pieceValue='5'>5</div>
+            </td>
+            <td>
+              <div class='gamePiece' data-rank='Lieutenant' data-pieceValue='6'>6</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class='gamePiece' data-rank='Sergeant' data-pieceValue='7'>7</div>
+            </td>
+            <td>
+              <div class='gamePiece' data-rank='Miner' data-pieceValue='8'>8</div>
+            </td>
+            <td>
+              <div class='gamePiece' data-rank='Scout' data-pieceValue='9'>9</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class='gamePiece' data-rank='Spy' data-pieceValue='10'>Spy</div>
+            </td>
+            <td>
+              <div class='gamePiece' data-rank='Flag' data-pieceValue='0'>Flag</div>
+            </td>
+            <td>
+              <div class='gamePiece' data-rank='BOMB' data-pieceValue='-1'>Bomb!</div>
+            </td>
+          </tr>
+
+        </table>
       </div>
     </div>
 

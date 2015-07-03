@@ -38,7 +38,7 @@ function configSocketIO() {
         io.emit('playerName2', playerName2);
         console.log(playerName1);
         console.log(playerName2);
-        setGameBoard(playerName1, playerName2);
+        createGameAndTeamObjects(playerName1, playerName2);
       } else {
         io.emit('gameLocked', 'locked');
         console.log('Locking out additional players');
@@ -47,13 +47,13 @@ function configSocketIO() {
 
     socket.on('player1Ready', function(value){
       player1Ready = true;
-      // update gameBoard, teamA, teamB
+      console.log(value);
       checkReady();
     });
 
     socket.on('player2Ready', function(value){
       player2Ready = true;
-      // update gameBoard, teamA, teamB
+      console.log(value);
       checkReady();
     });
 
@@ -62,9 +62,16 @@ function configSocketIO() {
       io.emit('fromServerToClientTurn', turnController(object));
     });
 
-    socket.on('disconnect', function(){
-      console.log('user disconnected');
+    socket.on('gamePiecePlaced', function(value){
+       console.log(value);
     });
+
+    socket.on('disconnect', function(){
+      console.log('user disconnected, NEED TO RESET');
+      resetGame();
+      io.emit('reset game', function (value){});
+    });
+
   });
 
   http.listen(3000, function(){
@@ -72,8 +79,8 @@ function configSocketIO() {
   });
 }
 
-function setGameBoard(player1, player2) {
-  io.emit('setBoard', true);
+function createGameAndTeamObjects(player1, player2) {
+  console.log('Place game pieces');
   gameBoard = createGameBoard();
   teamA = createTeam();
   teamB = createTeam();
@@ -158,6 +165,11 @@ function createTeam() {
 
   return teamArr;
 }
+
+function resetGame() {
+
+}
+
 
 // MAIN
 setUp();
