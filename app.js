@@ -67,9 +67,9 @@ function configSocketIO() {
     });
 
     socket.on('disconnect', function(){
-      console.log('user disconnected, NEED TO RESET');
+      console.log('user disconnected');
       resetGame();
-      io.emit('reset game', function (value){});
+      //io.emit('reset game', function (value){});
     });
 
   });
@@ -167,9 +167,8 @@ function createTeam() {
 }
 
 function resetGame() {
-
+  console.log('NEED TO RESET');
 }
-
 
 // MAIN
 setUp();
