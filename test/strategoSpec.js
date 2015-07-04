@@ -1,13 +1,12 @@
+// stratego smoke test by: heyMikeNauman
+
 describe('stratego smoke test', function() {
   it('should enter player name', function() {
-    browser.get('http://localhost:3000/');
+    browser.driver.get('http://localhost:3000/');
+    browser.driver.findElement(by.id('textArea')).sendKeys('Mike');
+    browser.driver.findElement(by.id('nameButton')).click();
 
-    element(by.model('textArea')).sendKeys('Mike');
-    element(by.css('[value="nameButton"]')).click();
-
-    var todoList = element.all(by.repeater('todo in todoList.todos'));
-    expect(todoList.count()).toEqual(3);
-    expect(todoList.get(2).getText()).toEqual('write first protractor test');
-
+    var message = browser.driver.findElement(by.id('gameMessage')).getText();
+    expect(message).toEqual('Place your pieces')
   });
 });
