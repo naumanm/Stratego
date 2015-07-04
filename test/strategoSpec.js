@@ -8,8 +8,12 @@ describe('stratego smoke test suite', function() {
 
   describe('test player name input', function() {
 
+    it('should check inital prompt', function () {
+      var message = browser.driver.findElement(by.id('gameMessage')).getText();
+      expect(message).toEqual('Please enter your name')
+    });
+
     it('should enter player name', function() {
-      checkInitalPrompt();
       enterName();
 
       var message = browser.driver.findElement(by.id('gameMessage')).getText();
@@ -21,7 +25,6 @@ describe('stratego smoke test suite', function() {
   describe('test board setup', function() {
 
     it('should click the place pieces button', function() {
-      checkInitalPrompt();
       enterName();
       clickPlacePieces();
 
@@ -31,12 +34,6 @@ describe('stratego smoke test suite', function() {
     });
 
   });
-
-  function checkInitalPrompt() {
-    var message;
-    message = browser.driver.findElement(by.id('gameMessage')).getText();
-    expect(message).toEqual('Please enter your name')
-  }
 
   function enterName() {
     browser.driver.findElement(by.id('textArea')).sendKeys('Mike');
