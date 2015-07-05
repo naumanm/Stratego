@@ -10,14 +10,14 @@ describe('stratego smoke test suite', function() {
 
     it('should check inital prompt', function () {
       var message = browser.driver.findElement(by.id('gameMessage')).getText();
-      expect(message).toEqual('Please enter your name')
+      expect(message).toEqual('Please enter your name');
     });
 
     it('should enter player name', function() {
       enterName();
 
       var message = browser.driver.findElement(by.id('gameMessage')).getText();
-      expect(message).toEqual('Place your pieces')
+      expect(message).toEqual('Place your pieces');
     });
 
   });
@@ -29,7 +29,7 @@ describe('stratego smoke test suite', function() {
       clickPlacePieces();
 
       var message = browser.driver.findElement(by.id('gameMessage')).getText();
-      expect(message).toEqual('Board is locked')
+      expect(message).toEqual('Board is locked');
 
     });
 
