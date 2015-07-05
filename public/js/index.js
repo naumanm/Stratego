@@ -159,6 +159,11 @@ window.onload = function() {
   }
 
   function loadListeners() {
+
+    // need to add different states
+    // depending on stage of game
+    //  
+
     $("td").mouseover(function(event){
       if (currentTurn) {
         console.log(this);

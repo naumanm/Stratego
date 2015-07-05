@@ -38,11 +38,6 @@ module.exports = function(grunt) {
       },
     },
 
-    test: {
-      pwd: ['./test/'],
-
-    }
-
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
