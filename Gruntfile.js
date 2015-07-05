@@ -2,6 +2,7 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
     protractor: {
       options: {
         configFile: "node_modules/protractor/example/conf.js", // Default config file
