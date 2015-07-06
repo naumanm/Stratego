@@ -64,10 +64,6 @@ window.onload = function() {
     document.getElementById("gameBoard").hidden=false;
     document.getElementById("row1").hidden=false;
 
-
-    // need to restrict this to only the 4x10
-    $('td').addClass('snapable');
-
     $('#playerName').replaceWith($('<h2 id="playerName">').text(currentPlayer));
     $('#gameMessage').replaceWith($('<h2 id="gameMessage">').text('Place your pieces'));
   }
@@ -160,25 +156,24 @@ window.onload = function() {
     console.log(testBoard.length);
   }
 
+
+
   function loadSetupListeners() {
 
-    console.log(gameBoard);
+    // need to restrict this to only the 4x10
+    // $('td').addClass('snapable');
 
-    // find all tds with any x but only y's < 5
-    // for (var x = 1; x < 11; x++) {
-    //   for (var y = 1; y < 5; y++) {
-    //       console.log(x, y);
-    //       console.log($("td").find("[data-idx='" + x + "']");
-    //   }
-    // }
+    for (var y = 1; y < 5; y++) {
+      $('td[data-idy="' + y + '"]').addClass("snapable")
+    }
 
     $( ".gamePiece" ).draggable({
       snap: ".snapable",
-      snapMode: "inner",
-      containment: "#gameBoard"
+      snapMode: "inner"
+      //containment: "#initialSetup"
     });
 
-    $( "td" ).droppable({
+    $( ".snapable" ).droppable({
       drop: function( event, ui ) {
         var pieceDropObj = {
           player: currentPlayer,

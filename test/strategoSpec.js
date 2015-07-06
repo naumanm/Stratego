@@ -13,7 +13,6 @@ describe('stratego smoke test suite', function() {
       expect(message).toEqual('Please enter your name');
 
       var readyButtonCheck = browser.driver.findElement(by.id('readyButton')).getAttribute('hidden');
-      console.log(readyButtonCheck);
       expect(readyButtonCheck).toBeTruthy();
     });
 
