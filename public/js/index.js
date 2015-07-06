@@ -3,8 +3,6 @@
 window.onload = function() {
   // main
   initialGameBoardSetup();
-  communicator();
-  loadListeners();
 
   // globals
   var playerName1 = null;
@@ -17,14 +15,18 @@ window.onload = function() {
     document.getElementById("readyButton").hidden=true;
     document.getElementById("gameBoard").hidden=true;
     document.getElementById("row1").hidden=true;
+    communicator();
   }
 
   function communicator() {
     document.getElementById("nameButton").addEventListener("click", function( event ) {
       setPlayerName();
+      loadSetupListeners();
     }, false);
     document.getElementById("readyButton").addEventListener("click", function( event ) {
       setGameboardReady();
+      unloadSetupListeners();
+      loadGameListeners();
     }, false);
     io().on('playerName1', function(name){
       setName('playerName1', name);
@@ -158,11 +160,44 @@ window.onload = function() {
     console.log(testBoard.length);
   }
 
-  function loadListeners() {
+  function loadSetupListeners() {
 
-    // need to add different states
-    // depending on stage of game
-    //  
+    console.log(gameBoard);
+
+    // find all tds with any x but only y's < 5
+    // for (var x = 1; x < 11; x++) {
+    //   for (var y = 1; y < 5; y++) {
+    //       console.log(x, y);
+    //       console.log($("td").find("[data-idx='" + x + "']");
+    //   }
+    // }
+
+    $( ".gamePiece" ).draggable({
+      snap: ".snapable",
+      snapMode: "inner",
+      containment: "#gameBoard"
+    });
+
+    $( "td" ).droppable({
+      drop: function( event, ui ) {
+        var pieceDropObj = {
+          player: currentPlayer,
+          rank: ui.draggable[0].dataset.rank,
+          xposition: event.target.dataset.idx,
+          yposition: event.target.dataset.idy,
+          pieceValue: ui.draggable[0].dataset.piecevalue
+        }
+        io().emit('gamePiecePlaced', pieceDropObj);
+        updateGameObject(pieceDropObj);
+      }
+    });
+  }
+
+  function unloadSetupListeners() {
+    console.log("turn off setup listeners");
+  }
+
+  function loadGameListeners() {
 
     $("td").mouseover(function(event){
       if (currentTurn) {
@@ -188,25 +223,6 @@ window.onload = function() {
       }
     });
 
-    $( ".gamePiece" ).draggable({
-      snap: ".snapable",
-      snapMode: "inner",
-      containment: "#gameBoard"
-    });
-
-    $( "td" ).droppable({
-      drop: function( event, ui ) {
-        var pieceDropObj = {
-          player: currentPlayer,
-          rank: ui.draggable[0].dataset.rank,
-          xposition: event.target.dataset.idx,
-          yposition: event.target.dataset.idy,
-          pieceValue: ui.draggable[0].dataset.piecevalue
-        }
-        io().emit('gamePiecePlaced', pieceDropObj);
-        updateGameObject(pieceDropObj);
-      }
-    });
   }
 
 };

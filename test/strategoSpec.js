@@ -11,6 +11,10 @@ describe('stratego smoke test suite', function() {
     it('should check inital prompt', function () {
       var message = browser.driver.findElement(by.id('gameMessage')).getText();
       expect(message).toEqual('Please enter your name');
+
+      var readyButtonCheck = browser.driver.findElement(by.id('readyButton')).getAttribute('hidden');
+      console.log(readyButtonCheck);
+      expect(readyButtonCheck).toBeTruthy();
     });
 
     it('should enter player name', function() {
