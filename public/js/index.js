@@ -156,8 +156,6 @@ window.onload = function() {
     console.log(testBoard.length);
   }
 
-
-
   function loadSetupListeners() {
 
     // need to restrict this to only the 4x10
