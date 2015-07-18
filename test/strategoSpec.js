@@ -2,6 +2,8 @@
 
 describe('stratego smoke test suite', function() {
 
+  // test for heroku
+
   beforeEach(function() {
     browser.driver.get('http://localhost:3000/');
   });
