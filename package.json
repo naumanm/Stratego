@@ -27,7 +27,7 @@
     "url": "https://github.com/naumanm/Stratego/issues"
   },
   "scripts": {
-    "test": "npm test"
+    "start": "node app.js"
   },
   "homepage": "https://github.com/naumanm/Stratego#readme"
 }
