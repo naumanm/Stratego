@@ -11,7 +11,8 @@ describe('stratego smoke test suite', function() {
     it('should check inital prompt', function () {
       return browser.driver.wait(function() {
         return browser.driver.findElement(by.id('gameMessage')).getText();
-      }, 2000).then(function (message) {
+      }, 2000)
+      .then(function (message) {
         expect(message).toEqual('Please enter your name');
       });
     });
