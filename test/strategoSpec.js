@@ -24,7 +24,7 @@ describe('stratego smoke test suite', function() {
       .then(function() {
         return browser.driver.wait(function (){
           return browser.driver.findElement(by.id('gameMessage')).getText();
-        }, 5000);
+        }, 2000);
       })
       .then(function(message) {
         expect(message).toEqual('Place your pieces');
@@ -45,7 +45,7 @@ describe('stratego smoke test suite', function() {
       .then(function(message) {
         return browser.driver.wait(function (){
           return browser.driver.findElement(by.id('gameMessage')).getText();
-        }, 5000);
+        }, 2000);
       })
       .then(function(message) {
         expect(message).toEqual('Board is locked');

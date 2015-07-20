@@ -12,6 +12,9 @@ For testing:
 $ npm install
 
 in separate terminal windows
+
 $ node app.js
+
 $ webdriver-manager start
+
 $ grunt watch
