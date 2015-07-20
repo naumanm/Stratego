@@ -26,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/naumanm/Stratego/issues"
   },
+  "scripts": {
+    "test": "vows --spec"
+  },
   "homepage": "https://github.com/naumanm/Stratego#readme"
 }
