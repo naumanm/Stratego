@@ -27,7 +27,7 @@
     "url": "https://github.com/naumanm/Stratego/issues"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "npm test"
   },
   "homepage": "https://github.com/naumanm/Stratego#readme"
 }
