@@ -1,4 +1,5 @@
 // Stratego, by heyMikeNauman
+// adding comment for tag/release testing
 
 window.onload = function() {
   // main
