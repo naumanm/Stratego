@@ -170,6 +170,6 @@ function resetGame() {
   console.log('NEED TO RESET');
 }
 
-// MAIN
+// MAIN - for a test commit
 setUp();
 configSocketIO();
